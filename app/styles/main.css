@@ -1,3 +1,23 @@
 body {
   padding: 20px;
+  height: 530px;
 }
+
+/* POPUP */
+
+#linkBox {
+	display: block;
+	max-height: 600px;
+	height: 400px;
+	overflow-x: hidden;
+	width: 452px;
+	padding: 10px;
+}
+.linkList {
+	border: 2px inset #56A9BF;
+	border-radius: 3px;
+	padding: 5px;
+	/* box-shadow: none|h-shadow v-shadow blur spread color |inset|initial|inherit; */
+	box-shadow: 2px 2px 5px 5px #56A9BF;
+}
+

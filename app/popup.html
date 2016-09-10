@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="linkzApp">
   <head>
     <meta charset="utf-8">
     <!-- build:css styles/popup-vendor.css -->
@@ -8,10 +8,31 @@
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
     <link href="styles/main.css" rel="stylesheet">
+    <!-- BOOTSTRAP CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- endbuild -->
+    <script src="libs/angular.js"></script>
+    <script src="scripts/app.js"></script>
   </head>
-  <body>
-    <h1>'Allo, 'Allo!</h1>
+  <body ng-controller="listCon">
+    <div id="queryBox">
+        <h1>My Linkz</h1>
+        <form class="searchForm">
+          <input ng-model="query" type="text"
+            placeholder="Filter by" autofocus>
+        </form>    
+    </div>
+
+    <div id="linkBox">
+        <ul ng-repeat="link in links | filter:query | orderBy:'dateAdded'">
+
+            <li class="linkList"> {{ link.title }} - <a href="{{ link.url }}">{{ link.url }}</a></li>
+            
+        </ul>       
+    </div>
+
+
+    <input class="btn btn-default" type="button" value="Add Link"><input class="btn btn-info" type="button" value="Add All Links">
 
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->
@@ -20,7 +41,7 @@
 
     <!-- build:js scripts/popup.js -->
     <script src="scripts/popup.js"></script>
-    <script src="/node_modules/angular/angular.js"></script>
+
     <!-- endbuild -->
   </body>
 </html>

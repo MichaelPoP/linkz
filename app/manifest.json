@@ -54,5 +54,8 @@
     },
     "default_title": "Linkz",
     "default_popup": "popup.html"
+  },
+  "chrome_url_overrides": {
+    "bookmarks": "better_bms.html"
   }
 }
