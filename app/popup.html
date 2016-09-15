@@ -7,6 +7,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
+    <link href="https://fonts.googleapis.com/css?family=Exo:900" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
     <!-- BOOTSTRAP CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -17,12 +18,15 @@
   </head>
   <body ng-controller="listCon">
     <div id="queryBox">
-        <h1>My Linkz</h1>
-        <form class="searchForm">
-          <input ng-model="query" type="text"
-            placeholder="Filter by" autofocus>
-        </form>    
+        <center>
+            <h1 id="linkzTitle">Linkz</h1>
+            <form class="searchForm">
+              <input ng-model="query" type="text"
+                placeholder="Filter by" autofocus>
+            </form> 
+        </center>   
     </div>
+    <hr>
     <!-- <input id="deleteLink" type="button" value="xxx"> -->
 
     <div id="linkBox">
@@ -30,7 +34,7 @@
 
             <li ng-if="!waiting" class="linkItem" data="link.id"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x"> {{ link.title.substr(0,50) }}
             <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a></li>
-            
+
             <img ng-if="waiting" src="images/processing.svg" alt="">
             
         </ul>

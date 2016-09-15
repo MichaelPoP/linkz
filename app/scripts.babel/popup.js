@@ -88,6 +88,10 @@ var bookmarksLoaded = function(){
 		 }, 1500);
 	}
 
+	$('.linkItem').on('mouseover', function(){
+		console.log('test');
+	})
+
 }
 
 

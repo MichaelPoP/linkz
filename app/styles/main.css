@@ -1,9 +1,21 @@
 body {
-  padding: 20px;
+  /* padding: 20px; */
   height: 530px;
+  margin: 0;
+  color: #666;
+  font: 13px arial,sans-serif;
 }
 
 /* POPUP */
+
+#queryBox {
+	padding: 4px;
+
+}
+
+#linkzTitle {
+	font-family: 'Exo', sans-serif;
+}
 
 #linkBox {
 	display: block;
@@ -15,6 +27,7 @@ body {
 }
 #linkList {
 
+
 }
 .linkItem {
 	max-height: 100px;
@@ -22,8 +35,24 @@ body {
 	border-radius: 3px;
 	padding-left: -15px;
 	list-style-type: none;
+
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100 */
+	background: rgb(238,238,238); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+
+
 	/* box-shadow: none|h-shadow v-shadow blur spread color |inset|initial|inherit; */
-	box-shadow: 1px 1px 2px 2px #23C9F6;
+	/* box-shadow: 1px 1px 2px 2px #23C9F6; */
 	/* -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(rgba(255, 255, 255, 0.3))) 0 0 0 0 stretch stretch; */
+}
+li.linkItem:hover {
+	height: 60px;
+	border: 3px inset #56A9BF;
+
+
+
 }
 
