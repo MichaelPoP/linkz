@@ -5,6 +5,11 @@ body {
   color: #666;
   font: 13px arial,sans-serif;
 }
+li>span {
+  color: #666;
+  font: 13px arial,sans-serif;
+  font-weight: 700;
+}
 
 /* POPUP */
 
@@ -33,7 +38,7 @@ body {
 	/* max-height: 100px; */
 	border: 2px inset #56A9BF;
 	border-radius: 3px;
-	padding-left: -15px;
+	margin-left: -15px;
 	list-style-type: none;
 
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100 */

@@ -84,18 +84,23 @@ var bookmarksLoaded = function(){
 	});
 
 
-	//REMOVE SPECIFIC LINK
+	//Adds an event listener to the element that contains the bookmark list
 	$('#linkBox').on('click', processAction);
 
+	//Processes the event when user clicks a bookmark
 	function processAction(e){
 		if(e.target.url){
 			removeBookmark(e);		
+		} else if(e.target.id.substr(0,3) === 'but'){
+			console.log(e.target.id.substr(4));
+			openAllFolderMarks(e.target.id.substr(4));
 		} else {
 			getFolderMarks(e);
 		}
 
 	}
 
+	//processes the action of clicking remove bookmark
 	function removeBookmark(e) {
 		console.log('test', e, e.target);
 		if (e.target.id == '') {console.log('its a link');return;}
@@ -138,25 +143,29 @@ var bookmarksLoaded = function(){
 	    if (e.target !== e.currentTarget) {
 	        var folderId = e.target.id;
 			console.log(folderId);
-			chrome.bookmarks.getChildren(String(folderId.substr(4)), function(marks){
-				console.log(marks);
-				// $('#'+e.target.id).append('<ul id="cool"></ul>');
-				marks.forEach(function(mark){
-					//ADDS FULL LIST ITEM
-					// $('#cool').append('<br><li class="linkItemFolder"><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a></li>');
-					//JUST ADDS URLS
-					$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+			console.log($('#'+folderId).height());
+			if($('#'+folderId).height() > 100){
+				console.log('MORE THAN 100');
+				var props = {'height': '58px'};
+				$('#'+folderId).animate(props,1000,'swing', removeUrls(folderId));
+			} else {
+				chrome.bookmarks.getChildren(String(folderId.substr(4)), function(marks){
+					console.log(marks);
+					// $('#'+e.target.id).append('<ul id="cool"></ul>');
+					marks.forEach(function(mark){
+						//ADDS FULL LIST ITEM
+						// $('#cool').append('<br><li class="linkItemFolder"><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a></li>');
+						//JUST ADDS URLS
+						$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+					});
+					var height = (marks.length * 20)+58+'px';
+
+					var props = {'height': height};
+					// console.log($('#'+folderId));
+					$('#'+folderId).animate(props,2000,'swing');
 				});
-				console.log(marks.length);
-				var height = (marks.length * 20)+58+'px';
-				console.log(height);
-				var props = {'height': height};
-				console.log(props);
-				// console.log($('#'+folderId));
-				$('#'+folderId).animate(props,2500,'swing');
-			});
+			}
 			
-			console.log(folderId);
 			// var bookmarkId = elementId.substr(4);
 			// console.log(bookmarkId);
 
@@ -170,7 +179,33 @@ var bookmarksLoaded = function(){
 	    e.stopPropagation();
 	}
 
-}
+	function removeUrls(id){
+		setTimeout(function(){ 
+			$('#'+id).children('a').remove();
+			$('#'+id).children('br').remove();
+		}, 1000);
+	}
+
+	function openAllFolderMarks(id){
+
+		// var links = $('#fol-'+id).children();
+		// console.log(links);
+		// links.forEach(function(link){
+		// 	console.log(link);
+		// });
+		chrome.bookmarks.getChildren(String(id), function(marks){
+			console.log(marks);
+			// $('#'+e.target.id).append('<ul id="cool"></ul>');
+			marks.forEach(function(mark){
+				console.log(mark.url);
+				chrome.tabs.create({url: mark.url});
+			});
+		});
+	}
+
+
+
+};//END OF WRAPPING FUNCTION
 
 
 

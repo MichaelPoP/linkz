@@ -5,6 +5,10 @@ var linkzApp = angular.module('linkzApp', []);
 
 linkzApp.controller('listCon', function listCon($scope) {
 
+$scope.getButton = function(id){
+	return '<input id="but-'+id+'" type="button" value="open all">';
+}
+
 $scope.fetchBookMarks = function(){
 	$scope.waiting = true;
 	var x = 1;
