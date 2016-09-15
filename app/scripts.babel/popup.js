@@ -74,8 +74,18 @@ var bookmarksLoaded = function(){
 			chrome.bookmarks.remove(bookmarkId, function(x){
 				console.log(x);
 			});
+			// console.log($('#'+elementId));
+			$('#'+elementId).parent().animate({height:'-=58px'},1500,'swing',removeItem(elementId));
+
 	    }
 	    e.stopPropagation();
+	}
+
+	function removeItem(id){
+		setTimeout(function(){ 
+			$('#'+id).parent().remove();
+			$('#'+id).parent().children().remove();
+		 }, 1500);
 	}
 
 }
