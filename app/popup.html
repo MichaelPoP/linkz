@@ -19,10 +19,11 @@
   <body ng-controller="listCon">
     <div id="queryBox">
         <center>
+            <span style="float:left;"><input id="addLink" class="btn btn-info" type="button" value="Add Link" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-info" type="button" value="Add All Links" tabindex="-1"></span>
             <h1 id="linkzTitle">Linkz</h1>
             <form class="searchForm">
-              <input ng-model="query" type="text"
-                placeholder="Filter by" autofocus>
+              <input id="queryInput" ng-model="query" type="text"
+                placeholder="Search.." autofocus="true">
             </form> 
         </center>   
     </div>
@@ -44,7 +45,7 @@
     </div>
 
     <div id="buttonDeck">
-        <input id="addLink" class="btn btn-default" type="button" value="Add Link"><input id="addAll" class="btn btn-info" type="button" value="Add All Links">
+        
     </div>
 
     <!-- build:js scripts/popup-vendor.js -->

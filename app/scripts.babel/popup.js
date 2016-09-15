@@ -1,6 +1,7 @@
 'use strict';
 
 var bookmarksLoaded = function(){
+	$('#queryInput').focus();
 
 	// $(window).load(function(){	
 		// console.log('check');
@@ -9,10 +10,10 @@ var bookmarksLoaded = function(){
 		// });
 	// });
 		//Listener for opening links in new tab through the api
-   $('body').on('click', 'a', function(){
-     chrome.tabs.create({url: $(this).attr('href')});
-     return false;
-   });
+	$('body').on('click', 'a', function(){
+	    chrome.tabs.create({url: $(this).attr('href')});
+	    return false;
+	});
 
 
 
@@ -39,7 +40,6 @@ var bookmarksLoaded = function(){
 
 	//ADD ALL LINKS
 	$('#addAll').on('click', function(){
-		console.log('adds lots of links..');
 		var folderName = prompt('Name the folder.');
 		chrome.tabs.query({'lastFocusedWindow': true}, function (tabs) {
 			console.log(tabs);
