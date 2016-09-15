@@ -79,7 +79,7 @@ var bookmarksLoaded = function(){
 	//Processes the event when user clicks a bookmark
 	function processAction(e){
 		// console.log(e.target.url, e.target.id.substr(0,3), e.target.attributes.data.value);
-		if(e.target.url){
+		if(e.target.attributes.class.value.substr(0,6) == 'delete'){
 			removeBookmark(e);		
 		} else if(e.target.id.substr(0,3) === 'but'){
 			openAllFolderMarks(e.target.id.substr(4));

@@ -33,7 +33,7 @@
         <div id="linkBox">
             <ul id="linkList" ng-repeat="link in links | filter:query | orderBy:'-dateAdded'">
 
-                <li ng-if="!waiting" id="fol-{{link.id}}" class="linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x"> <span>{{ link.title.substr(0,50) }}</span>
+                <li ng-if="!waiting" id="fol-{{link.id}}" class="linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
                 <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
                 <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary" type="button" value="open all">
                 </li>
