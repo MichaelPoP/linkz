@@ -28,20 +28,24 @@
     </div>
     <hr>
     <!-- <input id="deleteLink" type="button" value="xxx"> -->
+    <div id="grabUrl">
+        <div id="linkBox">
+            <ul id="linkList" ng-repeat="link in links | filter:query | orderBy:'-dateAdded'">
 
-    <div id="linkBox">
-        <ul id="linkList" ng-repeat="link in links | filter:query | orderBy:'-dateAdded'">
+                <li ng-if="!waiting" id="fol-{{link.id}}" class="linkItem" data="{{link.id}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x"> {{ link.title.substr(0,50) }}
+                <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
+                <!-- {{link.url ? '' : }} -->
+                </li>
 
-            <li ng-if="!waiting" class="linkItem" data="link.id"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x"> {{ link.title.substr(0,50) }}
-            <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a></li>
-
-            <img ng-if="waiting" src="images/processing.svg" alt="">
-            
-        </ul>
+                <img ng-if="waiting" src="images/processing.svg" alt="">
+                
+            </ul>
+        </div>
     </div>
 
-
-    <input id="addLink" class="btn btn-default" type="button" value="Add Link"><input id="addAll" class="btn btn-info" type="button" value="Add All Links">
+    <div id="buttonDeck">
+        <input id="addLink" class="btn btn-default" type="button" value="Add Link"><input id="addAll" class="btn btn-info" type="button" value="Add All Links">
+    </div>
 
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->

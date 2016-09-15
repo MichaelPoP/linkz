@@ -4,10 +4,11 @@ var linkzApp = angular.module('linkzApp', []);
 
 
 linkzApp.controller('listCon', function listCon($scope) {
+
 $scope.fetchBookMarks = function(){
 	$scope.waiting = true;
 	var x = 1;
-	var bms = [];
+	var marks = [];
 	while(x < 4){
 		var y;
 		// console.log(x);
@@ -16,29 +17,32 @@ $scope.fetchBookMarks = function(){
 			// console.log('1st', data);
 			data.forEach(function(node){
 				if(node.hasOwnProperty('url')){
-					bms.push(node);
-					// console.log('1', bms);
+					marks.push(node);
+					// console.log('1', marks);
 				} else {
+					marks.push(node);
 					chrome.bookmarks.getChildren(String(node.id), function(data){
 						// console.log('2nd', data);
 						data.forEach(function(node){
 							if(node.hasOwnProperty('url')){
-								bms.push(node);
-								// console.log('2', bms);
+								marks.push(node);
+								// console.log('2', marks);
 							} else {
+								marks.push(node);
 								chrome.bookmarks.getChildren(String(node.id), function(data){
 									// console.log('3rd', data);
 									data.forEach(function(node){
 										if(node.hasOwnProperty('url')){
-											bms.push(node);
-											// console.log('3', bms);
+											marks.push(node);
+											// console.log('3', marks);
 										} else {
+											marks.push(node);
 											chrome.bookmarks.getChildren(String(node.id), function(data){
 												// console.log('4th', data);
 												data.forEach(function(node){
 													if(node.hasOwnProperty('url')){
-														bms.push(node);
-														// console.log('4', bms);
+														marks.push(node);
+														// console.log('4', marks);
 													} else {
 														// console.log('FUCKKK');
 													}	
@@ -55,9 +59,9 @@ $scope.fetchBookMarks = function(){
 		});
 		x++;
 	}
-	console.log('final', bms);
+	console.log('final', marks);
 	$scope.waiting = false;
-	$scope.links = bms;
+	$scope.links = marks;
 	bookmarksLoaded();
 }
 $scope.fetchBookMarks();
