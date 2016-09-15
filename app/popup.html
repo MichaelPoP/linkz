@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- endbuild -->
     <script src="libs/angular.js"></script>
+    <script src="libs/jquery-3.1.0.min.js"></script>
     <script src="scripts/app.js"></script>
   </head>
   <body ng-controller="listCon">
@@ -22,17 +23,19 @@
             placeholder="Filter by" autofocus>
         </form>    
     </div>
+    <!-- <input id="deleteLink" type="button" value="xxx"> -->
 
     <div id="linkBox">
-        <ul ng-repeat="link in links | filter:query | orderBy:'dateAdded'">
+        <ul id="linkList" ng-repeat="link in links | filter:query | orderBy:'-dateAdded'">
 
-            <li class="linkList"> {{ link.title }} - <a href="{{ link.url }}">{{ link.url }}</a></li>
+            <li ng-if="!waiting" class="linkItem" data="link.id"><input id="lnk-{{ link.id }}"class="deleteLink btn btn-danger" type="button" value="x"> {{ link.title }} <hr><a href="{{ link.url }}">{{ link.url }}</a></li>
+            <img ng-if="waiting" src="images/processing.svg" alt="">
             
-        </ul>       
+        </ul>
     </div>
 
 
-    <input class="btn btn-default" type="button" value="Add Link"><input class="btn btn-info" type="button" value="Add All Links">
+    <input id="addLink" class="btn btn-default" type="button" value="Add Link"><input id="addAll" class="btn btn-info" type="button" value="Add All Links">
 
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->

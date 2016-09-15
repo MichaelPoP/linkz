@@ -11,13 +11,18 @@ body {
 	height: 400px;
 	overflow-x: hidden;
 	width: 452px;
-	padding: 10px;
+	padding: 5px;
 }
-.linkList {
+#linkList {
+	
+}
+.linkItem {
 	border: 2px inset #56A9BF;
 	border-radius: 3px;
-	padding: 5px;
+	padding-left: -15px;
+	list-style-type: none;
 	/* box-shadow: none|h-shadow v-shadow blur spread color |inset|initial|inherit; */
-	box-shadow: 2px 2px 5px 5px #56A9BF;
+	box-shadow: 1px 1px 2px 2px #23C9F6;
+	/* -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(rgba(255, 255, 255, 0.3))) 0 0 0 0 stretch stretch; */
 }
 
