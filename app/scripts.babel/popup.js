@@ -3,17 +3,67 @@
 var bookmarksLoaded = function(){
 	$('#queryInput').focus();
 
-	// $(window).load(function(){	
-		// console.log('check');
-		// chrome.bookmarks.getTree(function (tree) {
-		// 	console.log(tree);
-		// });
-	// });
-		//Listener for opening links in new tab through the api
+	//Listener for opening links in new tab through the api
 	$('body').on('click', 'a', function(){
 	    chrome.tabs.create({url: $(this).attr('href')});
 	    return false;
 	});
+
+	//JQuery UI code for making bookmarks sortable/draggable
+	// $( function() {
+	    // $( '#linkList' ).draggable({ scroll: true });
+	$('#linkzTitle').draggable();
+	$('#linkList').sortable();
+
+	//set occupied to false initially so that only folders can be dropped
+	var occupied = false;
+
+	//initiates the dropzone and switches mode depending on what is dropped
+	function initDropzone(id){
+		//when folder is dropped occupied is set to true
+		if(occupied === true){
+			$('#folderDrop').droppable({
+				accept: 'li[data*=false]',
+		      	drop: function(event, ui) {
+		      		console.log(event, ui);
+		      		console.log(ui.draggable[0].innerText);
+		      		var props = {'height': '60px'};
+
+		      		chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(id)}, function(data){
+		      			console.log('moved', data);
+		      		});
+
+		        	$(this).addClass('ui-state-highlight')
+		          		// .find('span')
+		            	.html(ui.draggable[0].innerText)
+		            	.animate(props,2000,'easeOutQuint');
+		            initDropzone();
+		      	}
+		    });
+		} else {
+			$('#folderDrop').droppable({
+				accept: 'li[data*=true]',
+		      	drop: function(event, ui) {
+		      		console.log(event, ui);
+		      		console.log(ui.draggable[0].innerText);
+		      		var props = {'height': '60px'};
+		        	$(this).addClass('ui-state-highlight')
+		          		// .find('span')
+		            	.html(ui.draggable[0].innerText)
+		            	.animate(props,2000,'easeOutQuint');
+		            occupied = true;
+		            initDropzone(ui.draggable[0].attributes.id.value.substr(4));
+		      	} 	
+		    });	
+
+		}
+
+	};
+	initDropzone();
+
+
+
+
 
 
 
@@ -85,6 +135,9 @@ var bookmarksLoaded = function(){
 			openAllFolderMarks(e.target.id.substr(4));
 		} else if(e.target.attributes.data.value === 'true') {
 			getFolderMarks(e);
+		} else {
+			e.stopPropagation();
+			return;
 		}
 	}
 
@@ -135,7 +188,7 @@ var bookmarksLoaded = function(){
 			if($('#'+folderId).height() > 50){
 				// console.log($('#'+folderId).height(), 'MORE THAN 50');
 				var props = {'height': '58px'};
-				$('#'+folderId).animate(props,1000,'swing', removeUrls(folderId));
+				$('#'+folderId).animate(props,1000,'easeOutQuint', removeUrls(folderId));
 			} else {
 				// console.log($('#'+folderId).height(), 'LESS THAN 50');
 				chrome.bookmarks.getChildren(String(folderId.substr(4)), function(marks){
@@ -152,7 +205,7 @@ var bookmarksLoaded = function(){
 
 					var props = {'height': height};
 					// console.log($('#'+folderId));
-					$('#'+folderId).animate(props,2000,'swing');
+					$('#'+folderId).animate(props,2000,'easeOutQuint');
 				});
 			}
 

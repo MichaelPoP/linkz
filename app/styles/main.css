@@ -21,8 +21,25 @@ li>input {
 
 }
 
+#queryInput {
+	margin-bottom: 6px;
+	width: 50%;
+	height: 2.2em;
+	font-size: 17px;
+	font-weight: 700;
+}
+
 #linkzTitle {
 	font-family: 'Exo', sans-serif;
+}
+
+#droppable {
+	display: block;
+	height: 44px;
+	width: 100px;
+	float: right;
+	border: 2px outset #000;
+	box-sizing: border-box;
 }
 
 #linkBox {
