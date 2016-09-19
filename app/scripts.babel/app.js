@@ -1,6 +1,6 @@
 'use strict';
 
-var linkzApp = angular.module('linkzApp', []);
+var linkzApp = angular.module('linkzApp', ['linkzApp.directive', 'linkzApp.service']);
 
 
 linkzApp.controller('listCon', function listCon($scope) {
@@ -9,18 +9,30 @@ linkzApp.controller('listCon', function listCon($scope) {
 		return '<input id="but-'+id+'" type="button" value="open all">';
 	}
 
+	//filter function that watches checkbox & filters by folder when checked
+	$scope.checkboxModel = { value: false };
+	$scope.filterFunc = function(items, query){
+		if($scope.checkboxModel.value === true){
+			return !items.url;
+		} else {
+			return items;
+		}
+	}
+
 	$scope.populateAutocomplete = function(){
 
-		var strArray = [];
+		$scope.strArray = [];
+		console.log($scope.links);
+		var linkObj = $scope.links;
+		setTimeout(function(){ 
+			linkObj.forEach(function(link){
+				// console.log(link.title);
+				$scope.strArray.push(link.title)
+			});
+		}, 500);
+		console.log($scope.strArray);
 
-		$scope.links.forEach(function(link){
-			strArray.push(link.title)
-		});
-		console.log(strArray);
 
-		$('#queryInput').autocomplete({
-			source: strArray
-		});
 
 	}
 
@@ -88,7 +100,9 @@ linkzApp.controller('listCon', function listCon($scope) {
 	$scope.fetchBookMarks();
 
 
-
+	$scope.autocomplete_options = function(){
+		suggest: suggest_state
+	}
 
 
 

@@ -9,30 +9,35 @@
     <!-- build:css styles/main.css -->
     <link href="https://fonts.googleapis.com/css?family=Exo:900" rel="stylesheet">
     <link rel="stylesheet" href="styles/jquery-ui.min.css">
-    <link href="styles/main.css" rel="stylesheet">
+    
     <!-- BOOTSTRAP CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="styles/main.css" rel="stylesheet">
     <!-- endbuild -->
     <script src="libs/angular.js"></script>
     <script src="libs/jquery-3.1.0.min.js"></script>
     <script src="libs/jquery-ui.min.js"></script>
     <script src="scripts/app.js"></script>
+    <script src="scripts/directive.js"></script>
+    <script src="scripts/service.js"></script>
   </head>
   <body ng-controller="listCon">
     <div id="queryBox">
         <center>
-            <span style="float:left;"><input id="addLink" class="btn btn-info" type="button" value="Add Link" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-info" type="button" value="Add All Links" tabindex="-1"></span>
+            <span style="float:left;"><input id="addLink" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="Add Link" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="Add Links" tabindex="-1"></span>
 
-            <h1 id="linkzTitle">Linkz</h1>
+            <!-- <h1 id="linkzTitle">Linkz</h1> -->
 
             <form class="searchForm">
-              <input id="queryInput" ng-model="query" type="text"
-                placeholder="Search.." autofocus="true">
+            <!-- mass-autocomplete -->
+                <div>
+                  <input id="queryInput" ng-model="query" type="text"
+                    placeholder="Search.." autofocus="true" auto-complete><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
+                </div>
             </form> 
+            <!-- mass-autocomplete-item="autocomplete_options" -->
 
-            <div id="folderDrop" class="ui-widget-header">
-                <span>drop folder here</span>
-            </div>
+
         </center>   
     </div>
     <!-- <hr> -->
@@ -41,7 +46,7 @@
         <div id="linkBox">
             <ul id="linkList" data="{{links.length}}">
 
-                <li ng-repeat="link in links | filter:query | orderBy:'-dateAdded'" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
+                <li ng-repeat="link in links | filter:query | filter:filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
                 <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
                 <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary" type="button" value="open all">
                 </li>
@@ -51,7 +56,9 @@
     </div>
 
     <div id="buttonDeck">
-        
+        <div id="folderDrop" class="ui-widget-header">
+            <span>drop folder here</span>
+        </div>
     </div>
 
     <!-- build:js scripts/popup-vendor.js -->

@@ -1,9 +1,12 @@
 body {
   /* padding: 20px; */
-  height: 530px;
-  margin: 0;
+  height: 100%;
+  margin: 0 auto;
   color: #666;
   font: 13px arial,sans-serif;
+  background: #FFF;
+  border: 1px solid #CACACA;
+
 }
 li>span {
   color: #666;
@@ -11,7 +14,11 @@ li>span {
   font-weight: 700;
 }
 li>input {
-	font-size: 5px;
+	font-size: 10px !important;
+}
+li>a {
+	font-size: 13px;
+	color: blue;
 }
 
 /* POPUP */
@@ -22,6 +29,7 @@ li>input {
 }
 
 #queryInput {
+	margin-top: 1px;
 	margin-bottom: 6px;
 	width: 50%;
 	height: 2.2em;
@@ -29,18 +37,41 @@ li>input {
 	font-weight: 700;
 }
 
+#folderCheckbox {
+	position:absolute;
+	top: 14px;
+	right: 126px;
+}
+#folderCheckbox:hover::before {
+	content: 'Only show folders';
+	display: inline-block;
+	white-space: nowrap;
+	position: absolute;
+	right: 14px;
+}
+
 #linkzTitle {
 	font-family: 'Exo', sans-serif;
 }
 
-#droppable {
-	display: block;
-	height: 44px;
-	width: 100px;
-	float: right;
-	border: 2px outset #000;
-	box-sizing: border-box;
+#folderDrop {
+	/* display: block; */
+	/* height: 44px; */
+	/* width: 100px; */
+	/* float: right; */
+	border: 2px outset #535E72;
+	/* box-sizing: border-box; */
 }
+.occupied-state {
+	
+}
+
+.folderTitle {
+	font-size: 1.7em;
+	font-weight: 800;
+	margin-bottom: -6px;
+}
+
 
 #linkBox {
 	display: block;
@@ -49,6 +80,8 @@ li>input {
 	overflow-x: hidden;
 	width: 452px;
 	padding: 5px;
+	margin-left: -20px;
+	margin-bottom: 6px;
 }
 #linkList {
 
@@ -56,9 +89,10 @@ li>input {
 }
 .linkItem {
 	/* max-height: 100px; */
-	border: 2px inset #56A9BF;
-	border-radius: 3px;
-	margin-left: -15px;
+	border: 1px inset #BAD8DF;
+	color: #BADA55;
+	border-radius: 1px;
+	margin-left: -20px;
 	padding: 5px;
 	list-style-type: none;
 
@@ -74,25 +108,7 @@ li>input {
 	/* box-shadow: 1px 1px 2px 2px #23C9F6; */
 	/* -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(rgba(255, 255, 255, 0.3))) 0 0 0 0 stretch stretch; */
 }
-.linkItemFolder {
-	/* max-height: 100px; */
-	border: 2px inset #56A9BF;
-	border-radius: 3px;
-	padding-left: -15px;
-	list-style-type: circle;
 
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100 */
-	background: rgb(238,238,238); /* Old browsers */
-	background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
-
-
-	/* box-shadow: none|h-shadow v-shadow blur spread color |inset|initial|inherit; */
-	/* box-shadow: 1px 1px 2px 2px #23C9F6; */
-	/* -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(rgba(255, 255, 255, 0.3))) 0 0 0 0 stretch stretch; */
-}
 li.linkItem:hover {
 	/* height: 60px; */
 	border: 3px inset #56A9BF;
@@ -101,3 +117,51 @@ li.linkItem:hover {
 
 }
 
+
+
+
+/* CUSTOM BOOTSTRAP BUTTON STUFF */
+
+.btn {
+    padding: 7.7px 10px;
+    border: 0 none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+ 
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+ 
+.btn-primary {
+    background: #94C0CC;
+    color: #ffffff;
+}
+ 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background: #C9D3D6;
+}
+ 
+.btn-primary:active, .btn-primary.active {
+    background: #93B6B9;
+    box-shadow: none;
+}
+
+
+
+
+
+
+
+
+.btn-primary.raised {
+	box-shadow: 0 3px 0 0 #007299;
+}
+.btn-primary.raised:active, .btn-primary.raised.active {
+	background: #33a6cc;
+	box-shadow: none;
+	margin-bottom: -3px;
+	/* margin-top: 1px; */
+}

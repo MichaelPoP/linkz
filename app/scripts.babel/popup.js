@@ -20,10 +20,11 @@ var bookmarksLoaded = function(){
 
 	//initiates the dropzone and switches mode depending on what is dropped
 	function initDropzone(id){
+		console.log(occupied);
 		//when folder is dropped occupied is set to true
 		if(occupied === true){
 			$('#folderDrop').droppable({
-				accept: 'li[data*=false]',
+				// accept: 'li[data*=false]',
 		      	drop: function(event, ui) {
 		      		console.log(event, ui);
 		      		console.log(ui.draggable[0].innerText);
@@ -33,7 +34,7 @@ var bookmarksLoaded = function(){
 		      			console.log('moved', data);
 		      		});
 
-		        	$(this).addClass('ui-state-highlight')
+		        	$(this).addClass('occupied-state')
 		          		// .find('span')
 		            	.html(ui.draggable[0].innerText)
 		            	.animate(props,2000,'easeOutQuint');
@@ -49,7 +50,8 @@ var bookmarksLoaded = function(){
 		      		var props = {'height': '60px'};
 		        	$(this).addClass('ui-state-highlight')
 		          		// .find('span')
-		            	.html(ui.draggable[0].innerText)
+		            	.html('<p class="folderTitle">'+ui.draggable[0].innerText+'</p>')
+		            	.append('<p>drag a bookmark here to add it the folder</p>')
 		            	.animate(props,2000,'easeOutQuint');
 		            occupied = true;
 		            initDropzone(ui.draggable[0].attributes.id.value.substr(4));
@@ -198,7 +200,7 @@ var bookmarksLoaded = function(){
 					marks.forEach(function(mark){
 						//ADDS FULL LIST ITEM
 						// $('#cool').append('<br><li class="linkItemFolder"><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a></li>');
-						//JUST ADDS URLS
+						//Appends an link element for each bookmark in the selected folder
 						$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
 					});
 					var height = (marks.length * 20)+58+'px';
