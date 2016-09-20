@@ -1,17 +1,18 @@
 'use strict';
-
+//everything wrapped in a function that is called when the marks are loaded
 var bookmarksLoaded = function(){
 	$('#queryInput').focus();
 
-	//Listener for opening links in new tab through the api
+	//OPEN LINK LISTENER for opening links in new tab through the api
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	$('body').on('click', 'a', function(){
 	    chrome.tabs.create({url: $(this).attr('href')});
 	    return false;
 	});
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	//JQuery UI code for making bookmarks sortable/draggable
-	// $( function() {
-	    // $( '#linkList' ).draggable({ scroll: true });
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	$('#linkzTitle').draggable();
 	$('#linkList').sortable();
 
@@ -62,15 +63,11 @@ var bookmarksLoaded = function(){
 
 	};
 	initDropzone();
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
-
-
-
-
-
-	//Add link button logic
+	//ADD BOOKMARK - click handler/function for adding current tab to bookmarks
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	$('#addLink').on('click', function(){
 		console.log('adds link..');
 		chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
@@ -88,9 +85,11 @@ var bookmarksLoaded = function(){
 		});
 
 	});
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-	//ADD ALL LINKS
+	//ADD ALL LINKS - click handler/function that prompts user for name and
+	//makes all current tabs a bookmark in that directory
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	$('#addAll').on('click', function(){
 		var folderName = prompt('Name the folder.');
 		chrome.tabs.query({'lastFocusedWindow': true}, function (tabs) {
@@ -123,13 +122,22 @@ var bookmarksLoaded = function(){
 		});
 
 	});
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+
+
+
+//HERE LIES THE ONLY WAY I COULD FIGURE OUT HOW TO HANDLE ALL EVENTS WITH ONE HANDLER
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Adds an event listener to the element that contains the bookmark list
 	$('#linkBox').on('click', processAction);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	//Processes the event when user clicks a bookmark
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	function processAction(e){
+		console.log(e);
 		// console.log(e.target.url, e.target.id.substr(0,3), e.target.attributes.data.value);
 		if(e.target.attributes.class.value.substr(0,6) == 'delete'){
 			removeBookmark(e);		
@@ -137,48 +145,92 @@ var bookmarksLoaded = function(){
 			openAllFolderMarks(e.target.id.substr(4));
 		} else if(e.target.attributes.data.value === 'true') {
 			getFolderMarks(e);
+		} else if(e.target.id === 'cancelRemove'){
+			processCancel(e);
+		} else if (e.target.id === 'confirmRemove'){
+			processRemoval(e);
 		} else {
 			e.stopPropagation();
 			return;
 		}
 	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+
+	var elementId, bookmarkId, remContent;
 	//processes the action of clicking remove bookmark
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	function removeBookmark(e) {
 		console.log('test', e, e.target);
 		if (e.target.id == '') {console.log('its a link');return;}
 
 	    if (e.target !== e.currentTarget) {
-	        var elementId = e.target.id;
 
-			console.log(elementId);
-			var bookmarkId = elementId.substr(4);
-			console.log(bookmarkId);
+	        elementId = 'fol-'+e.target.id.substr(4);
+			bookmarkId = elementId.substr(4);
+			console.log(elementId, bookmarkId);
+			console.log('CHECK - ');
 
-			chrome.bookmarks.remove(bookmarkId, function(x){
-				console.log(x);
-			});
-			// console.log($('#'+elementId));
-			$('#'+elementId).parent().animate({height:'-=58px'},1500,'swing',removeItem(elementId));
+			remContent = $('#'+elementId).children().detach();
 
+			setTimeout(function(){
+			console.log(elementId); 
+				$('#'+elementId).append('<div id="confirmBox"></div>')
+		
+	 		}, 100);
+	 		setTimeout(function(){ 
+	 			console.log(elementId, bookmarkId, e.target.id.substr(4));
+	 		 	$('#confirmBox').append('<input id="confirmRemove" class="btn btn-default greenHov" type="button" value="confirm" data="'+elementId+'">')
+				$('#confirmBox').append('<input id="cancelRemove" class="btn btn-default" type="button" value="cancel" data="'+elementId+'">');
+	 		 }, 200);
+	 		// $('#'+elementId).stop().animate({height:'-=70px'},1000,'easeOutQuint', function(){
+	 	 	$('#'+elementId).stop().animate({height:'+=48px'},2000,'easeOutQuint');
+	 		// });
+
+			
+				// $('#confirmRemove').on('click', processRemoval(elementId, bookmarkId));
 	    }
 	    e.stopPropagation();
 	}
 
-	function removeItem(id){
-		setTimeout(function(){ 
-			$('#'+id).parent().remove();
-			$('#'+id).parent().children().remove();
-		 }, 1500);
+	//processes the cancel remove event
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	function processCancel(e){
+		console.log('processCancel', elementId);
+		$('#confirmBox').remove();
+		$('#confirmRemove').remove();
+		$('#cancelRemove').remove();
+		// $('#'+elementId).parent().children().show();
+		// ('#'+elementId).append(remContent);
+		remContent.appendTo('#'+elementId);
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	//DELETE A BOOKMARK - process click on confirm event 
+	//(actually deletes the bookmark)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	function processRemoval(e){
+			chrome.bookmarks.remove(bookmarkId, function(x){
+				console.log(x);
+			});
+			// console.log($('#'+elementId));
+			$('#'+elementId).animate({height:'-=100px'},1500,'swing',removeItem(elementId));
 	}
 
-	$('.linkItem').on('mouseover', function(){
-		console.log('test');
-	});
+	function removeItem(id){
+		setTimeout(function(){ 
+			$('#'+id).remove();
+			$('#'+id).children().remove();
+		 }, 1500);
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
-	//GET BOOKMARKS FOR A FOLDER
+	//GET BOOKMARKS FOR A FOLDER - (process click on folder event)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	function getFolderMarks(e) {
 		// console.log('test', e, e.target);
 		if (e.target.id == '') {console.log('its a link');return;}
@@ -187,6 +239,7 @@ var bookmarksLoaded = function(){
 	        var folderId = e.target.id;
 			// console.log(folderId, $('#'+folderId).height());
 
+			//IF/ELSE to check if folder is open or not
 			if($('#'+folderId).height() > 50){
 				// console.log($('#'+folderId).height(), 'MORE THAN 50');
 				var props = {'height': '58px'};
@@ -214,14 +267,21 @@ var bookmarksLoaded = function(){
 	    }
 	    e.stopPropagation();
 	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+	//HIDE BOOKMARKS FOR FOLDER - (processes click on open folder)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	function removeUrls(id){
 		setTimeout(function(){ 
 			$('#'+id).children('a').remove();
 			$('#'+id).children('br').remove();
 		}, 1000);
 	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	//OPEN ALL BOOKMARKS FOR FOLDER - (processes click on open all button)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	function openAllFolderMarks(id){
 
 		chrome.bookmarks.getChildren(String(id), function(marks){
@@ -232,10 +292,11 @@ var bookmarksLoaded = function(){
 			});
 		});
 	}
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 };//END OF WRAPPING FUNCTION
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 

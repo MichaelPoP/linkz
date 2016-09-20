@@ -99,6 +99,15 @@ linkzApp.controller('listCon', function listCon($scope) {
 	}
 	$scope.fetchBookMarks();
 
+	// var applyFn = function () {
+ //    	$scope.links = $scope.links;
+	// };
+	// if ($scope.$$phase) { // most of the time it is "$digest"
+	//     applyFn();
+	// } else {
+	//     $scope.$apply(applyFn);
+	// }
+
 
 	$scope.autocomplete_options = function(){
 		suggest: suggest_state

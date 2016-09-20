@@ -46,9 +46,9 @@
         <div id="linkBox">
             <ul id="linkList" data="{{links.length}}">
 
-                <li ng-repeat="link in links | filter:query | filter:filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-danger" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
+                <li ng-repeat="link in links | filter:query | filter:filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
                 <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
-                <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary" type="button" value="open all">
+                <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
                 </li>
                 
             </ul>
@@ -56,9 +56,11 @@
     </div>
 
     <div id="buttonDeck">
+        <center>
         <div id="folderDrop" class="ui-widget-header">
             <span>drop folder here</span>
         </div>
+        </center>
     </div>
 
     <!-- build:js scripts/popup-vendor.js -->
