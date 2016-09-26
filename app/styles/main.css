@@ -59,14 +59,6 @@ li>a {
 	font-family: 'Exo', sans-serif;
 }
 
-#folderDrop {
-	/* display: block; */
-	/* height: 44px; */
-	/* width: 100px; */
-	/* float: right; */
-	border: 2px outset #535E72;
-	/* box-sizing: border-box; */
-}
 .occupied-state {
 	
 }
@@ -127,6 +119,38 @@ li.linkItem:hover {
 
 }
 
+.dropBoxes {
+	width: 140px;
+	padding: 8px;
+	border: 3px solid #7D8F9E;
+}
+#anyDrop {
+	float: left;
+}
+
+#folderDrop {
+	float: right;
+	/* display: block; */
+	/* border: 2px solid #7D8F9E; */
+	/* box-sizing: border-box; */
+}
+.occupied-state {
+	/* background: #93DDF1; */
+	/* box-shadow: #05B6FF */
+-webkit-box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
+-moz-box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
+box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
+}
+.dropped-state {
+-webkit-box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
+-moz-box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
+box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);	
+}
+.hide-class {
+	color: white;
+	display: none;
+	visibility: hidden;
+}
 
 
 
@@ -139,6 +163,7 @@ li.linkItem:hover {
     letter-spacing: 1px;
     text-transform: uppercase;
     font-weight: 700;
+    border-radius: 2px;
 }
  
 .btn:focus, .btn:active:focus, .btn.active:focus {

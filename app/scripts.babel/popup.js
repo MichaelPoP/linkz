@@ -18,38 +18,59 @@ var bookmarksLoaded = function(){
 
 	//set occupied to false initially so that only folders can be dropped
 	var occupied = false;
+	var contents;
 
 	//initiates the dropzone and switches mode depending on what is dropped
 	function initDropzone(id){
-		console.log(occupied);
+		console.log(occupied, id);
 		//when folder is dropped occupied is set to true
 		if(occupied === true){
 			$('#folderDrop').droppable({
+				//for accepting only bookmarks
 				// accept: 'li[data*=false]',
+				accept: 'li',
+				tolerance: 'touch',
 		      	drop: function(event, ui) {
 		      		console.log(event, ui);
 		      		console.log(ui.draggable[0].innerText);
-		      		var props = {'height': '60px'};
+		      		// var props = {'background': '#7EF1ED'};
+		      		var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
 
 		      		chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(id)}, function(data){
 		      			console.log('moved', data);
 		      		});
 
-		        	$(this).addClass('occupied-state')
+		      		$('#folderDrop').children().addClass('hide-class');
+
+		        	$('#folderDrop')
+		        		.addClass('dropped-state')
 		          		// .find('span')
-		            	.html(ui.draggable[0].innerText)
-		            	.animate(props,2000,'easeOutQuint');
+		            	.append('<p id="droppedMark">'+ui.draggable[0].innerText+'</p>')
+		            	.animate(props1,2000,'easeOutQuint');
+		            	setTimeout(function(){ 
+		            		// var props = {'background': '#93DDF1'};
+		            		var props2 = {color:'hex(#000)', borderColor:'hex(#05B6FF)'};
+		            		var remProps = {'opacity': 0};
+		            		$('#droppedMark').remove().animate(remProps, 2000, 'easeOutQuint');
+		            		$('#folderDrop').children().removeClass('hide-class')
+		            		$('#folderDrop').removeClass('dropped-state').addClass('occupied-state');
+		            		// console.log($contents);
+		            		// contents.appendTo('#folderDrop');
+		            		$('#folderDrop').animate(props2, 2000, 'easeOutQuint');
+		            	}, 2500);
 		            initDropzone();
 		      	}
 		    });
 		} else {
 			$('#folderDrop').droppable({
 				accept: 'li[data*=true]',
+				tolerance: 'touch',
 		      	drop: function(event, ui) {
 		      		console.log(event, ui);
 		      		console.log(ui.draggable[0].innerText);
-		      		var props = {'height': '60px'};
-		        	$(this).addClass('ui-state-highlight')
+		      		var props = {'height': '60px', 'width':'290px',backgroundColor:'hex(#FFF)',color:'hex(#000)',borderColor:'hex(#05B6FF)'};
+		        	$(this)
+		        		.addClass('occupied-state')
 		          		// .find('span')
 		            	.html('<p class="folderTitle">'+ui.draggable[0].innerText+'</p>')
 		            	.append('<p>drag a bookmark here to add it the folder</p>')
@@ -254,7 +275,11 @@ var bookmarksLoaded = function(){
 						//ADDS FULL LIST ITEM
 						// $('#cool').append('<br><li class="linkItemFolder"><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a></li>');
 						//Appends an link element for each bookmark in the selected folder
-						$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+						//doesn't display folders inside folders
+						if(mark.url){
+							$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+						}
+						
 					});
 					var height = (marks.length * 20)+58+'px';
 
@@ -297,7 +322,6 @@ var bookmarksLoaded = function(){
 
 };//END OF WRAPPING FUNCTION
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 
 

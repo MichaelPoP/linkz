@@ -19,6 +19,7 @@
     "http://*/*",
     "https://*/*",
     "bookmarks",
+    "contextMenus",
     "clipboardRead",
     "clipboardWrite",
     "cookies",
