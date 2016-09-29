@@ -47,6 +47,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-mass-autocomplete": "^0.4.0",
+    "angular-route": "^1.5.8",
     "jquery": "^3.1.0",
     "jquery-ui": "^1.12.1"
   }

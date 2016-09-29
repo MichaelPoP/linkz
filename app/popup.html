@@ -20,11 +20,14 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/directive.js"></script>
     <script src="scripts/service.js"></script>
+    <!-- <script src="scripts/component.js"></script> -->
+    <script src="scripts/postloadController.js"></script>
+    <script src="libs/angular-route.js"></script>
   </head>
   <body ng-controller="listCon">
     <div id="queryBox">
         <center>
-            <span style="float:left;"><input id="addLink" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="Add Link" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="Add Links" tabindex="-1"></span>
+            <span style="float:left;"><input id="addLink" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="+" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="++" tabindex="-1"></span>
 
             <!-- <h1 id="linkzTitle">Linkz</h1> -->
 
@@ -32,22 +35,35 @@
             <!-- mass-autocomplete -->
                 <div>
                   <input id="queryInput" ng-model="query" type="text"
-                    placeholder="Search.." autofocus="true" auto-complete><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
+                    placeholder="Search.." autofocus="true" auto-comp><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
+                    <div id="folderBox" class="hide-class">
+                        <form id="folderNameForm">
+                            <input id="folderNameInput" class="hide-class" type="text" placeholder="Folder Name.." autocomplete="off">
+                            <input id="folderNameSubmit" class="btn btn-default hide-class greenHov" type="submit">
+                        </form>
+                    </div>
+                    <div id="alertBox" class="hide-class">
+                        
+                    </div>
                 </div>
             </form> 
-            <!-- mass-autocomplete-item="autocomplete_options" -->
+
 
 
         </center>   
     </div>
+
+    <!-- <link-list ng-if="allAboard"></link-list> -->
     <!-- <hr> -->
     <!-- <input id="deleteLink" type="button" value="xxx"> -->
+
     <div id="grabUrl">
-        <div id="linkBox">
+        <div id="linkBox" class="linkBox">
             <ul id="linkList" data="{{links.length}}">
 
-                <li ng-repeat="link in links | filter:query | filter:filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span>
-                <a href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
+                <li ng-repeat="link in links | filter:query | filter:filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"> <span>{{ link.title.substr(0,50) }}</span><img class="linkFavicon" ng-if="link.url" height="16" width="16" src='http://www.google.com/s2/favicons?domain={{link.url}}' /><div ng-if="link.url"><br></div>
+                <a class="linkUrl" ng-if="link.url" href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
+                <!-- <div ng-if="link.url" class="iBox"><iframe src="{{link.url}}" frameborder="0" width="95%"></iframe></div> -->
                 <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
                 </li>
                 

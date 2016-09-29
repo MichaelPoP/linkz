@@ -1,11 +1,6 @@
 'use strict';
-//NEED TO GET RID OF SET_TIMEOUT, NEED TO SPLIT INTO MORE FUCNTIONS
-//NEED TO TURN MORE PARTS INTO DRIECTIVES
-var linkzApp = angular.module('linkzApp', ['ngRoute', 'linkzApp.directive', 'linkzApp.service']);
-// , 'linkzApp.component'
 
-linkzApp.controller('listCon', function listCon($scope) {
-
+linkzApp.controller('postloadController', ['$scope', function postloadController($scope) {
 
 	var allAboard = false;
 	$scope.bookmarksLoaded = function($scope) {
@@ -96,15 +91,10 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-		function removeAlert(){
-			console.log($('#alertBox'), $('#alertBox').children();
-
-		}
-
-
 		//ADD BOOKMARK - click handler/function for adding current tab to bookmarks
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#addLink').on('click', function(){
+			console.log('adds link..');
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
 				console.log(tabs);
 			    var url = tabs[0].url;
@@ -128,10 +118,9 @@ linkzApp.controller('listCon', function listCon($scope) {
 		var showPrompt = false;
 		$('#addAll').on('click', function(){
 			// var folderName = prompt('Name the folder.');
-			$('#folderNameInput').removeClass('hide-class').focus();
+			$('#folderNameInput').removeClass('hide-class');
 			$('#folderNameSubmit').removeClass('hide-class');
-			$('#folderBox').removeClass('hide-class');
-			$('#folderBox').stop().animate({height:'+=48px'},1000,'easeOutQuint');
+			$('#folderName').stop().animate({height:'+=48px'},1000,'easeOutQuint');
 		});
 
 		$('#folderNameSubmit').on('click', function(){
@@ -141,27 +130,11 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 				var folder = new Object();
 				folder.title = folderName;
-				var height = (tabs.length * 20)+48+'px';
-				var props = {'height':height};
 
 			    chrome.bookmarks.create(folder, function(data){
 			    	console.log(data);
-			    	if(data){
-			    		$('#alertBox').addClass('alert alert-success');
-			    		addTabs(data.id);
-			    	} else {
-			    		$('#alertBox').addClass('alert alert-danger');
-			    	}
- 
-			    		$('#folderBox').animate({height:'-=48px'},1000,'easeOutQuint');
-			    		$('#folderBox').addClass('hide-class');
-			    		$('#alertBox').removeClass('hide-class');
-			    		$('#alertBox').stop().animate(props,1000,'easeOutQuint');
-			    		// {height:'+=48px'}
-			   
-			    	
-			    	
-			    	
+			    	console.log(data.id);
+			    	addTabs(data.id);
 			    });
 
 			    function addTabs(folderId){
@@ -174,17 +147,13 @@ linkzApp.controller('listCon', function listCon($scope) {
 			    		bookmark.url = tab.url;
 			    		console.log(bookmark);
 			    		chrome.bookmarks.create(bookmark, function(data){
-			    			console.log('bms create: ', data);
-			    			$('#alertBox').append('<p class="successLinks">'+data.title.substr(0,60)+'</p>');
-
-			    		});
-			    	});
-			    	setTimeout(function(){ removeAlert(); }, 1500);
+			    			console.log(data);
+			    		})
+			    	})
 			    }
 
 			});
-
-		});//ON CLICK CALLBACK END
+		})
 
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -234,6 +203,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		        elementId = 'fol-'+e.target.id.substr(4);
 				bookmarkId = elementId.substr(4);
 				console.log(elementId, bookmarkId);
+				console.log('CHECK - ');
 
 				remContent = $('#'+elementId).children().detach();
 
@@ -247,11 +217,9 @@ linkzApp.controller('listCon', function listCon($scope) {
 		 		 	$('#confirmBox').append('<input id="confirmRemove" class="btn btn-default greenHov" type="button" value="confirm" data="'+elementId+'">')
 					$('#confirmBox').append('<input id="cancelRemove" class="btn btn-default" type="button" value="cancel" data="'+elementId+'">');
 		 		 }, 200);
-
-		 		if($('#'+elementId).height() > 49){
-		 	 		$('#'+elementId).stop().animate({height:'+=48px'},1000,'easeOutQuint');
-		 	 	}
-
+		 		// $('#'+elementId).stop().animate({height:'-=70px'},1000,'easeOutQuint', function(){
+		 	 	$('#'+elementId).stop().animate({height:'+=48px'},1000,'easeOutQuint');
+		 		// });
 
 				
 					// $('#confirmRemove').on('click', processRemoval(elementId, bookmarkId));
@@ -277,33 +245,11 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//(actually deletes the bookmark)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function processRemoval(e){
-				console.log($('#'+elementId).attr('data'));
-				if($('#'+elementId).attr('data')){
-					console.log('folder remove');
-					var folderId = bookmarkId;
-					chrome.bookmarks.getChildren(bookmarkId, function(data){
-						data.forEach(function(mark){
-							console.log(mark);
-							chrome.bookmarks.remove(mark.id, function(data){
-
-
-							});
-
-						});
-						chrome.bookmarks.remove(bookmarkId, function(data){});
-
-					});
-
-				} else {
-					console.log('bookmark remove');
-					chrome.bookmarks.remove(bookmarkId, function(x){
-						console.log(x);
-					});		
-				}
-
+				chrome.bookmarks.remove(bookmarkId, function(x){
+					console.log(x);
+				});
 				// console.log($('#'+elementId));
-				var elemH = $('#'+elementId).height();
-				$('#'+elementId).animate({height:'-='+elemH+'px'},1500,'swing',removeItem(elementId));
+				$('#'+elementId).animate({height:'-=100px'},1500,'swing',removeItem(elementId));
 		}
 
 		function removeItem(id){
@@ -383,103 +329,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 				});
 			});
 		}
-
-
-
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	} //END OF BOOKMARKSLOADED INIT FUNCTION
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
-
-	// $scope.getButton = function(id){
-	// 	return '<input id="but-'+id+'" type="button" value="open all">';
-	// }
-
-	//filter function that watches checkbox & filters by folder when checked
-	$scope.checkboxModel = { value: false };
-	$scope.filterFunc = function(items, query){
-		if($scope.checkboxModel.value === true){
-			return !items.url;
-		} else {
-			return items;
-		}
 	}
-
-	$scope.populateAutocomplete = function(){
-
-		$scope.strArray = [];
-		// console.log($scope.links);
-		var linkObj = $scope.links;
-		setTimeout(function(){ 
-			linkObj.forEach(function(link){
-				// console.log(link.title);
-				$scope.strArray.push(link.title)
-			});
-		}, 500);
-		console.log('autocomplete array', $scope.strArray);
-	}
-
-
-//load times 13 12 15 12 20 12
-	var marks = [];
-	var timeS = 0;
-	$scope.getChildren = function(id){
-
-		chrome.bookmarks.getChildren(String(id), function(data){
-			// console.log('4th', data);
-			data.forEach(function(node){
-				if(node.hasOwnProperty('url')){
-					marks.push(node);
-					// console.log('4', marks);
-				} else {
-					marks.push(node);
-					// GO GET MORE CHILDREN FOR THIS NODE
-					$scope.getChildren(node.id);
-					// console.log('FUCKKK');
-				}	
-			});
-		});
-
-	}
-
-
-	$scope.fetchBookMarks = function(){
-		// timeS = new Date().getTime();
-		// console.log(timeS);
-		$scope.waiting = true;
-		var x = 1;
-		while(x < 4){
-			var y;
-			y = String(x);
-			$scope.getChildren(y);
-			x++;
-		}
-		console.log('all-marks: ', marks);
-		$scope.waiting = false;
-		$scope.links = marks;
-		// var timeE = new Date().getTime() - timeS;
-		// console.log(timeE);
-		$scope.bookmarksLoaded();
-		$scope.populateAutocomplete();
-	}
-	$scope.fetchBookMarks();
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -490,4 +340,4 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 
 	
-});
+}]);

@@ -54,6 +54,12 @@ li>a {
 	position: absolute;
 	right: 14px;
 }
+#folderBox {
+	height: 0px;
+}
+#alertBox {
+	height: 0px;
+}
 
 #linkzTitle {
 	font-family: 'Exo', sans-serif;
@@ -67,6 +73,18 @@ li>a {
 	font-size: 1.7em;
 	font-weight: 800;
 	margin-bottom: -6px;
+}
+.successLinks {
+	text-align: left;
+}
+
+.linkFavicon {
+	float: right;
+	margin: 2px;
+}
+
+.linkUrl {
+	margin-left: 40px;
 }
 
 
@@ -113,7 +131,7 @@ li>a {
 
 li.linkItem:hover {
 	/* height: 60px; */
-	border: 3px inset #56A9BF;
+	border: 2px outset #56A9BF;
 
 
 
