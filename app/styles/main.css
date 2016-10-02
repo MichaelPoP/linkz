@@ -69,6 +69,13 @@ li>a {
 	
 }
 
+.titleInput {
+	width: 80%;
+	height: 2em;
+	margin-left: 13px;
+	font-size: 14px;
+}
+
 .folderTitle {
 	font-size: 1.7em;
 	font-weight: 800;

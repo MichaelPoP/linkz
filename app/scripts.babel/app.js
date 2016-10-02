@@ -20,9 +20,22 @@ linkzApp.controller('listCon', function listCon($scope) {
 		});
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+		// $('.linkFavicon').error(function() {
+  //   		alert( 'Handler for .error() called.' )
+  // 		}).attr( 'src', '../images/lnkz_logo.png' );
+
+		function handleError(){
+			console.log('handled?');
+			$(this).attr('src', '../images/lnkz_logo.png');
+			// this.src = '../images/lnkz_logo.png';
+		}
+		$(document).ready(function () {
+		    $('img').on('error', handleError);
+		});
+		// .attr( 'src', 'missing.png' );
+
 		//JQuery UI code for making bookmarks sortable/draggable
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		$('#linkzTitle').draggable();
 		$('#linkList').sortable();
 
 		//set occupied to false initially so that only folders can be dropped
@@ -97,7 +110,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 
 		function removeAlert(){
-			console.log($('#alertBox'), $('#alertBox').children();
+			console.log($('#alertBox'), $('#alertBox').children());
 
 		}
 
@@ -213,6 +226,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 				processCancel(e);
 			} else if (e.target.id === 'confirmRemove'){
 				processRemoval(e);
+			} else if (e.target.attributes.data.value === 'update'){
+				updateTitle(e);
 			} else {
 				e.stopPropagation();
 				return;
@@ -230,6 +245,10 @@ linkzApp.controller('listCon', function listCon($scope) {
 			if (e.target.id == '') {console.log('its a link');return;}
 
 		    if (e.target !== e.currentTarget) {
+
+				$('.deleteLink').prop('disabled', true);
+
+				console.log($(this));
 
 		        elementId = 'fol-'+e.target.id.substr(4);
 				bookmarkId = elementId.substr(4);
@@ -262,6 +281,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//processes the cancel remove event
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function processCancel(e){
+			$('.deleteLink').prop('disabled', false);
 			console.log('processCancel', elementId);
 			$('#confirmBox').remove();
 			$('#confirmRemove').remove();
@@ -277,6 +297,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//(actually deletes the bookmark)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function processRemoval(e){
+			$('.deleteLink').prop('disabled', false);
 				console.log($('#'+elementId).attr('data'));
 				if($('#'+elementId).attr('data')){
 					console.log('folder remove');
@@ -382,6 +403,15 @@ linkzApp.controller('listCon', function listCon($scope) {
 					chrome.tabs.create({url: mark.url});
 				});
 			});
+		}
+
+		function updateTitle(e){
+			console.log('updating', e.target);
+			var inputId = 'inp-'+e.target.id.substr(4);
+			$('#'+e.target.id).addClass('hide-class');
+			$('#'+inputId).removeClass('hide-class');
+			// $('#'+e.target.id).append('<input type="text" value="'+e.target.id+'">');
+
 		}
 
 
