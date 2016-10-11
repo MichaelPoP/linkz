@@ -211,6 +211,14 @@ linkzApp.controller('listCon', function listCon($scope) {
 		$('#linkBox').on('click', processAction);
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+		function processAction(e){
+			e.addEventHandler(function(){
+
+
+			});
+
+		}
+
 		//Processes the event when user clicks a bookmark
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function processAction(e){
@@ -271,8 +279,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 		 	 		$('#'+elementId).stop().animate({height:'+=48px'},1000,'easeOutQuint');
 		 	 	}
 
-
-				
 					// $('#confirmRemove').on('click', processRemoval(elementId, bookmarkId));
 		    }
 		    e.stopPropagation();
@@ -423,14 +429,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 
 
-
-
-
-
-	// $scope.getButton = function(id){
-	// 	return '<input id="but-'+id+'" type="button" value="open all">';
-	// }
-
 	//filter function that watches checkbox & filters by folder when checked
 	$scope.checkboxModel = { value: false };
 	$scope.filterFunc = function(items, query){
@@ -439,20 +437,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 		} else {
 			return items;
 		}
-	}
-
-	$scope.populateAutocomplete = function(){
-
-		$scope.strArray = [];
-		// console.log($scope.links);
-		var linkObj = $scope.links;
-		setTimeout(function(){ 
-			linkObj.forEach(function(link){
-				// console.log(link.title);
-				$scope.strArray.push(link.title)
-			});
-		}, 500);
-		console.log('autocomplete array', $scope.strArray);
 	}
 
 
@@ -496,7 +480,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		// var timeE = new Date().getTime() - timeS;
 		// console.log(timeE);
 		$scope.bookmarksLoaded();
-		$scope.populateAutocomplete();
+		// $scope.populateAutocomplete();
 	}
 	$scope.fetchBookMarks();
 
