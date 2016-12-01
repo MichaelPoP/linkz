@@ -1,23 +1,15 @@
 'use strict';
 //NEED TO GET RID OF SET_TIMEOUT, NEED TO SPLIT INTO MORE FUCNTIONS
-//NEED TO TURN MORE PARTS INTO DRIECTIVES
+//NEED TO TURN MORE PARTS INTO DIRECTIVES/COMPONENTS (sometimes directives suck)
 var linkzApp = angular.module('linkzApp', ['ngRoute', 'linkzApp.directive', 'linkzApp.service']);
-// , 'linkzApp.component'
-
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 linkzApp.controller('listCon', function listCon($scope) {
 
-	// $('#linkBox').imagesLoaded( function() {
-	  // images have loaded
-	  // var allImgs = document.querySelectorAll('.linkFavicon');
-	  // $('.linkFavicon').allImgs.fadeIn(2000);
-	  	// $('img').each(function(pic){
-		  //   pic.fadeIn(5000);
-	   //  });
-	// });
-
-
-
 	var allAboard = false;
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+  //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_//
+//function called when all the bookmarks have been fetched to prevent all sorts
+//of errors, but ideally this would be in a component fetching from a service
 	$scope.bookmarksLoaded = function($scope) {
 		allAboard = true;
 		$('#queryInput').focus();
@@ -30,21 +22,19 @@ linkzApp.controller('listCon', function listCon($scope) {
 		});
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-		// $('.linkFavicon').error(function() {
-  //   		alert( 'Handler for .error() called.' )
-  // 		}).attr( 'src', '../images/lnkz_logo.png' );
-
+		//handles links that have broken or non-existent favicons
+  		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function handleError(){
 			console.log('handled?');
 			$(this).attr('src', '../images/lnkz_logo.png');
-			// this.src = '../images/lnkz_logo.png';
+			// '../images/missing.png'; ???
 		}
 		$(document).ready(function () {
 		    $('img').on('error', handleError);
 		});
-		// .attr( 'src', 'missing.png' );
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-		//JQuery UI code for making bookmarks sortable/draggable
+		//JQuery UI code for making bookmarks SORTABLE/DRAGGABLE
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#linkList').sortable();
 
@@ -53,21 +43,24 @@ linkzApp.controller('listCon', function listCon($scope) {
 		var contents;
 
 		//initiates the dropzone and switches mode depending on what is dropped
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		//note: still need to write behavior for switching the occupying folder
 		function initDropzone(id){
 			console.log(occupied, id);
-			//when folder is dropped occupied is set to true
+			//when dropzone is occupied it is set to true & only accepts links
+			//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 			if(occupied === true){
 				$('#folderDrop').droppable({
 					//for accepting only bookmarks
-					// accept: 'li[data*=false]',
-					accept: 'li',
+					accept: 'li[data*=false]',
+					// accept: 'li',
 					tolerance: 'touch',
 			      	drop: function(event, ui) {
 			      		console.log(event, ui);
 			      		console.log(ui.draggable[0].innerText);
 			      		// var props = {'background': '#7EF1ED'};
 			      		var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
-
+			      		//here the dropped link is actually moved to folder
 			      		chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(id)}, function(data){
 			      			console.log('moved', data);
 			      		});
@@ -94,6 +87,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 			      	}
 			    });
 			} else {
+				//condition initializes the dropzone for link dropping
+				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				$('#folderDrop').droppable({
 					accept: 'li[data*=true]',
 					tolerance: 'touch',
@@ -118,12 +113,14 @@ linkzApp.controller('listCon', function listCon($scope) {
 		initDropzone();
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+		//remove the success alert for adding links and folders
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function removeAlert(){
-			console.log($('#alertBox'), $('#alertBox').children());
-
+			// console.log($('#alertBox'), $('#alertBox').children());
+			$('#alertBox').remove();
+			$('#alertBox').children().remove();
 		}
-
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		//ADD BOOKMARK - click handler/function for adding current tab to bookmarks
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,6 +146,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//makes all current tabs a bookmark in that directory
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		var showPrompt = false;
+		//processes clicking the add all button and displays the name input form
+		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		$('#addAll').on('click', function(){
 			// var folderName = prompt('Name the folder.');
 			$('#folderNameInput').removeClass('hide-class').focus();
@@ -157,6 +156,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 			$('#folderBox').stop().animate({height:'+=48px'},1000,'easeOutQuint');
 		});
 
+		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		$('#folderNameSubmit').on('click', function(){
 			var folderName = $('#folderNameInput').val();
 			chrome.tabs.query({'lastFocusedWindow': true}, function (tabs) {
@@ -167,6 +167,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 				var height = (tabs.length * 20)+48+'px';
 				var props = {'height':height};
 
+				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 			    chrome.bookmarks.create(folder, function(data){
 			    	console.log(data);
 			    	if(data){
@@ -181,12 +182,10 @@ linkzApp.controller('listCon', function listCon($scope) {
 			    		$('#alertBox').removeClass('hide-class');
 			    		$('#alertBox').stop().animate(props,1000,'easeOutQuint');
 			    		// {height:'+=48px'}
-			   
-			    	
-			    	
-			    	
+			       	
 			    });
 
+			    //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 			    function addTabs(folderId){
 			    	var folderId = folderId;
 			    	tabs.forEach(function(tab){
@@ -202,7 +201,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 			    		});
 			    	});
-			    	setTimeout(function(){ removeAlert(); }, 1500);
+			    	setTimeout(function(){ removeAlert(); }, 2400);
 			    }
 
 			});
@@ -221,13 +220,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 		$('#linkBox').on('click', processAction);
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-		function processAction(e){
-			e.addEventHandler(function(){
-
-
-			});
-
-		}
 
 		//Processes the event when user clicks a bookmark
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,21 +251,22 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//processes the action of clicking remove bookmark
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function removeBookmark(e) {
-			console.log('test', e, e.target);
+			console.log('clicked remove bookmark', e, e.target);
 			if (e.target.id == '') {console.log('its a link');return;}
 
 		    if (e.target !== e.currentTarget) {
 
 				$('.deleteLink').prop('disabled', true);
 
-				console.log($(this));
-
 		        elementId = 'fol-'+e.target.id.substr(4);
 				bookmarkId = elementId.substr(4);
 				console.log(elementId, bookmarkId);
-
+				//this is a way of stashing the contents of the link item in the DOM
+				//while the user decides if they want to delete it
 				remContent = $('#'+elementId).children().detach();
 
+				//added the following setTimeouts so that the animation would work
+				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				setTimeout(function(){
 				console.log(elementId); 
 					$('#'+elementId).append('<div id="confirmBox"></div>')
@@ -289,7 +282,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 		 	 		$('#'+elementId).stop().animate({height:'+=48px'},100,'easeOutQuint');
 		 	 	}
 
-					// $('#confirmRemove').on('click', processRemoval(elementId, bookmarkId));
 		    }
 		    e.stopPropagation();
 		}
@@ -315,6 +307,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 		function processRemoval(e){
 			$('.deleteLink').prop('disabled', false);
 				console.log($('#'+elementId).attr('data'));
+				//if the data attribute is true it means its a folder
+				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				if($('#'+elementId).attr('data')){
 					console.log('folder remove');
 					var folderId = bookmarkId;
@@ -322,27 +316,24 @@ linkzApp.controller('listCon', function listCon($scope) {
 						data.forEach(function(mark){
 							console.log(mark);
 							chrome.bookmarks.remove(mark.id, function(data){
-
-
+								console.log('folder removed', data);
 							});
-
 						});
-						chrome.bookmarks.remove(bookmarkId, function(data){});
-
+						chrome.bookmarks.remove(bookmarkId, function(data){console.log(data);});
 					});
 
 				} else {
-					console.log('bookmark remove');
+					//otherwise its a bookmark
 					chrome.bookmarks.remove(bookmarkId, function(x){
-						console.log(x);
+						console.log('bookmark removed', x);
 					});		
 				}
-
-				// console.log($('#'+elementId));
+				//little fancy animation before removing the link item
 				var elemH = $('#'+elementId).height();
 				$('#'+elementId).animate({height:'-='+elemH+'px'},100,'swing',removeItem(elementId));
 		}
-
+		//removes the item from the the DOM
+		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		function removeItem(id){
 			setTimeout(function(){ 
 				$('#'+id).remove();
@@ -356,16 +347,16 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//GET BOOKMARKS FOR A FOLDER - (process click on folder event)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function getFolderMarks(e) {
-			// console.log('test', e, e.target);
+
 			if (e.target.id == '') {console.log('its a link');return;}
 
 		    if (e.target !== e.currentTarget) {
 		        var folderId = e.target.id;
-				// console.log(folderId, $('#'+folderId).height());
 
 				//IF/ELSE to check if folder is open or not
+				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				if($('#'+folderId).height() > 50){
-					// console.log($('#'+folderId).height(), 'MORE THAN 50');
+					console.log($('#'+folderId).height(), 'MORE THAN 50');
 					var props = {'height': '58px'};
 					$('#'+folderId).animate(props,1000,'easeOutQuint', removeUrls(folderId));
 				} else {
@@ -384,7 +375,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 							}
 							
 						});
-						var height = (marks.length * 20)+58+'px';
+						var height = (marks.length * 15)+58+'px';
 
 						var props = {'height': height};
 						// console.log($('#'+folderId));
