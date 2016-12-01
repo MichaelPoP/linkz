@@ -6,6 +6,16 @@ var linkzApp = angular.module('linkzApp', ['ngRoute', 'linkzApp.directive', 'lin
 
 linkzApp.controller('listCon', function listCon($scope) {
 
+	// $('#linkBox').imagesLoaded( function() {
+	  // images have loaded
+	  // var allImgs = document.querySelectorAll('.linkFavicon');
+	  // $('.linkFavicon').allImgs.fadeIn(2000);
+	  	// $('img').each(function(pic){
+		  //   pic.fadeIn(5000);
+	   //  });
+	// });
+
+
 
 	var allAboard = false;
 	$scope.bookmarksLoaded = function($scope) {
@@ -276,7 +286,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		 		 }, 200);
 
 		 		if($('#'+elementId).height() > 49){
-		 	 		$('#'+elementId).stop().animate({height:'+=48px'},1000,'easeOutQuint');
+		 	 		$('#'+elementId).stop().animate({height:'+=48px'},100,'easeOutQuint');
 		 	 	}
 
 					// $('#confirmRemove').on('click', processRemoval(elementId, bookmarkId));
@@ -330,14 +340,14 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 				// console.log($('#'+elementId));
 				var elemH = $('#'+elementId).height();
-				$('#'+elementId).animate({height:'-='+elemH+'px'},1500,'swing',removeItem(elementId));
+				$('#'+elementId).animate({height:'-='+elemH+'px'},100,'swing',removeItem(elementId));
 		}
 
 		function removeItem(id){
 			setTimeout(function(){ 
 				$('#'+id).remove();
 				$('#'+id).children().remove();
-			 }, 1500);
+			 }, 100);
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

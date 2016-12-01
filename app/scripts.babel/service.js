@@ -35,24 +35,23 @@ angular.module('linkzApp.service', [])
             return marks;
         }
     }
-}])
-.factory('autoCompleteService', [function(scope) {
-    return {
-        getSource: function(scope) {
-        	var strArray = [];
-			var linkObj1 = scope.$parent.links;
-			var linkObj2 = scope.links;
-			console.log(linkObj1, linkObj2);
-
-			setTimeout(function(){ 
-				linkObj1.forEach(function(link){
-					// console.log(link.title);
-					strArray.push(link.title)
-				});
-			}, 1);
-			console.log(strArray);
-            //this is where you'd set up your source... could be an external source, I suppose. 'something.php'
-            return strArray;
-        }
-    }
 }]);
+// .factory('autoCompleteService', [function(scope) {
+//     return {
+//         getSource: function(scope) {
+//         	var strArray = [];
+// 			var linkObj1 = scope.$parent.links;
+// 			var linkObj2 = scope.links;
+// 			console.log(linkObj1, linkObj2);
+
+// 			setTimeout(function(){ 
+// 				linkObj1.forEach(function(link){
+// 					// console.log(link.title);
+// 					strArray.push(link.title)
+// 				});
+// 			}, 1);
+// 			console.log(strArray);
+//             return strArray;
+//         }
+//     }
+// }]);

@@ -1,18 +1,18 @@
 angular.module('linkzApp.directive', [])
-.directive('autoComp', function(autoCompleteService) {
-  return {
-    restrict: 'A',
-    scope: {
-      'model': '='
-    },
-    link: function(scope, elem, attrs) {
-    	console.log(scope, elem, attrs);
-      $(elem).autocomplete({
-				source: autoCompleteService.getSource(scope)
-			});
-    }
-  };
-})
+// .directive('autoComp', function(autoCompleteService) {
+//   return {
+//     restrict: 'A',
+//     scope: {
+//       'model': '='
+//     },
+//     link: function(scope, elem, attrs) {
+//     	console.log(scope, elem, attrs);
+//       $(elem).autocomplete({
+// 				source: autoCompleteService.getSource(scope)
+// 			});
+//     }
+//   };
+// })
 .directive('bookmarkNode', function(fetchBookmarkService) {
   return {
     restrict: 'A',
@@ -440,6 +440,23 @@ angular.module('linkzApp.directive', [])
       $(elem).append('<iframe src="'+elem.data.value+'" width="100%"></iframe>');
     }
   };
+})
+.directive('imgFadeInOnload', function () {
+  // http://stackoverflow.com/a/32562343/4455203
+    return {
+      restrict: 'A',
+      link: function postLink(scope, element, attr) {
+        element.css('opacity', 0);
+        element.css('-moz-transition', 'opacity 2s');
+        element.css('-webkit-transition', 'opacity 2s');
+        element.css('-o-transition', 'opacity 2s');
+        element.css('transition', 'opacity 2s');
+        element.bind('load', function () {
+          element.css('opacity', 1);
+        });
+        element.attr('src', attr.imgFadeInOnload);
+      }
+    };
 });
 
 

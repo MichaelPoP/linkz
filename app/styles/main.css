@@ -26,6 +26,7 @@ li>a {
 	color: blue;
 }
 
+
 /* POPUP */
 
 #queryBox {
@@ -214,19 +215,21 @@ box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
 .btn-default {
 	background: #FFF;
 	border: 2px solid #D3DEE9;
+	color: rgba(237,29,29,0.54);
 
 }
 .btn-default:hover {
 	background: #FDFDFD;
+	color: rgba(255,255,255,0.7);
 	/* #ed1d1d shadow hex val*/
--webkit-box-shadow: inset 1px 1px 15px 6px rgba(237,29,29,0.54);
--moz-box-shadow: inset 1px 1px 15px 6px rgba(237,29,29,0.54);
-box-shadow: inset 1px 1px 15px 6px rgba(237,29,29,0.54);
+-webkit-box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
+-moz-box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
+box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
 }
 .greenHov:hover {
--webkit-box-shadow: inset 1px 1px 15px 6px rgba(12,179,4,1);
--moz-box-shadow: inset 1px 1px 15px 6px rgba(12,179,4,1);
-box-shadow: inset 1px 1px 15px 6px rgba(12,179,4,1);
+-webkit-box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
+-moz-box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
+box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
 }
 
 
