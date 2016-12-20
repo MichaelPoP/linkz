@@ -19,7 +19,7 @@ li>span {
   padding-left: 5px;
 }
 li>input {
-	font-size: 10px !important;
+	font-size: 10px;
 }
 li>a {
 	font-size: 13px;
@@ -33,6 +33,10 @@ li>a:hover {
 
 /* POPUP */
 
+
+/* HEADER BOX */
+/* holds all the static stuff at the top */
+/* -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 #queryBox {
 	padding: 4px;
 
@@ -66,19 +70,76 @@ li>a:hover {
 	height: 0px;
 }
 
-#linkzTitle {
-	font-family: 'Exo', sans-serif;
+
+/* ADD BOX */
+/* stuff for adding a single link */
+/* -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/* #linkDestInput {
+
+} */
+#addBox {
+
+}
+#linkNameInput {
+	width: 95%;
+	height: 33px;
+	border: 1px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: white;
+    font-size: 16px;
+/*     vertical-align: middle;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto; */
+
 }
 
-.occupied-state {
-	
+#linkNameSubmit {
+	color: #58B05C;
 }
+#linkNameSubmit:hover {
+	color:  white;
+}
+#destFolderName {
+	font-size: 16px;
+	margin-left: 24px;
+	text-align: left;
+}
+
+.destPre {
+	display: inline-block;
+	font-size: 16px;
+	text-align: left;
+	float: left;
+	margin-left: 10px;
+	font-weight: 800; 
+}
+
+.destFolder {
+	display: inline-block;
+	font-size: 16px;
+	text-align: left;
+}
+
+
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+
+/* BODY */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/* font-family: 'Exo', sans-serif; */
+
 
 .titleInput {
-	width: 80%;
+	width: 60%;
 	height: 2em;
 	margin-left: 13px;
-	font-size: 14px;
+	font-size: 16px;
+	font-weight: 900;
+	color: #01136D;
 }
 
 .folderTitle {
@@ -86,9 +147,52 @@ li>a:hover {
 	font-weight: 800;
 	margin-bottom: -6px;
 }
+
+
+/* ALERT STUFF */
+
+.alert-suxess {
+	color: #468B48;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    padding: 10px;
+    border: 3px solid transparent;
+    border-radius: 4px;
+}
+
 .successLinks {
 	text-align: left;
 }
+.success1Link {
+	text-align: left;
+	margin: 0px 0px 5px 0px;
+}
+.success1Link.title {
+	/* text-align: left; */
+	font-weight: 900;
+/* 	position: absolute;
+	top: 65px;
+	left: 15px; */
+}
+.success1Link.destAdded {
+	/* float: right; */
+
+	font-weight: 600;
+/* 	position: absolute;
+	top: 65px;
+	left: 200px; */
+}
+.success1Link.urlAdded {
+	/* text-align: left; */
+	font-weight: 600;
+	white-space: nowrap
+/* 	position: absolute;
+	top: 90px;
+	left: 15px; */
+}
+
+
+
 
 .linkFavicon {
 	float: right;
@@ -193,7 +297,7 @@ box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-weight: 700;
+    /* font-size: 14px; */
     border-radius: 2px;
 }
  
@@ -203,12 +307,17 @@ box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
 
 /* custom primary */
 .btn-primary {
+	font-size: 12px;
     background: #94C0CC;
     color: #ffffff;
+}
+.btn-primary.addto {
+	background: #58B05C;
 }
  
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
     background: #C9D3D6;
+    font-size: 12px;
 }
  
 .btn-primary:active, .btn-primary.active {
@@ -238,7 +347,9 @@ box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
 }
 
 
-
+.raised:hover	{
+	color: #5574DC;
+}
 
 /* raised look for primary class */
 .btn-primary.raised {
@@ -248,5 +359,6 @@ box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
 	background: #33a6cc;
 	box-shadow: none;
 	margin-bottom: -3px;
+	color: #007299;
 	/* margin-top: 1px; */
 }
