@@ -45,6 +45,7 @@
                                     </div>
                                     <div class="col-xs-4">
                                         <input id="folderNameSubmit" class="btn btn-default hide-class greenHov" type="submit">
+                                        <input id="folderNameCancel" class="btn btn-default hide-class" type="submit" style="float:right;" value="x">
                                     </div>
                                 </form>
                             </div>
@@ -61,10 +62,11 @@
                                             <div class="col-xs-8">
                                                <!--  <select id="linkDestInput" class="hide-class" ng-model="linkDest" ng-options="folder as folder.title.substr(0,49) for folder in folders track by folder.id" width="40">
                                                 </select>  -->
-                                                <input id="linkNameInput" class="hide-class" type="text" maxlength="30">
+                                                <input id="linkNameInput" class="hide-class" type="text" maxlength="30" placeholder="Name Yo Link..">
                                             </div>
-                                            <div class="col-xs-4">
-                                                <input id="linkNameSubmit" class="btn btn-default hide-class greenHov" type="submit">
+                                            <div class="col-xs-4" style="padding:0px 7px 0px 7px;">
+                                                <input id="linkNameSubmit" class="btn btn-default hide-class greenHov" type="submit" style="float:left">
+                                                <input id="linkNameCancel" class="btn btn-default hide-class" type="submit" style="float:right;" value="x">
                                             </div>
                                         </form>
                                     </div>
@@ -102,7 +104,8 @@
                 <li ng-repeat="link in links | filter:query | filter: (checkboxModel.value || '') && filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"><span id="tit-{{ link.id }}" class="linkTitle" data="update">{{ link.title.substr(0,34) }}</span><input id="inp-{{link.id}}" class="hide-class titleInput" type="text" value="{{link.title}}"><img img-fade-in-onload="{{imgSrc}}" class="linkFavicon" ng-if="link.url" height="16" width="16" src='http://www.google.com/s2/favicons?domain={{link.url.substr(0,4) === "file" || link.url.substr(0,5) === "chrom" || link.url.substr(0,4) === "data" ? "google.com" : link.url}}' /><div ng-if="link.url"><br></div>
                 <a class="linkUrl" ng-if="link.url" href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
                 <!-- <div ng-if="link.url" class="iBox"><iframe src="{{link.url}}" frameborder="0" width="95%"></iframe></div> -->
-                <input ng-if="!link.url" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
+                <input ng-if="!link.url && !folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
+                <input ng-if="!link.url && folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn addto" type="button" value="add">
                 </li>
                 
             </ul>

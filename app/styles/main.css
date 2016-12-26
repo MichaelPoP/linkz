@@ -78,30 +78,28 @@ li>a:hover {
 
 } */
 #addBox {
+	margin-top: 7px;
 
 }
-#linkNameInput {
+/* div[id^="as_"]
+div[id^="bs_"] */
+
+input[id*='NameInput'] {
 	width: 95%;
-	height: 33px;
+	height: 38px;
 	border: 1px solid #cdcdcd;
     border-color: rgba(0,0,0,.15);
     background-color: white;
-    font-size: 16px;
-/*     vertical-align: middle;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    margin: auto; */
-
+    font-size: 18px;
+    margin: 0px 0px 0px 0px;
 }
 
-#linkNameSubmit {
+input[id*='NameSubmit'] {
 	color: #58B05C;
+	display: inline-block;
+
 }
-#linkNameSubmit:hover {
+input[id*='NameSubmit']:hover {
 	color:  white;
 }
 #destFolderName {
@@ -115,12 +113,13 @@ li>a:hover {
 	font-size: 16px;
 	text-align: left;
 	float: left;
-	margin-left: 10px;
+	margin: 4px 0px 0px 12px;
 	font-weight: 800; 
 }
 
 .destFolder {
 	display: inline-block;
+	margin-top: 2px;
 	font-size: 16px;
 	text-align: left;
 }

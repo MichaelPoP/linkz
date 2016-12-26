@@ -14,8 +14,8 @@ $('#container').imagesLoaded().fail( function( instance ) {
   //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_//
 //function called when all the bookmarks have been fetched to prevent all sorts
 //of errors, but ideally this would be in a component fetching from a service
-	$scope.bookmarksLoaded = function($scope) {
-		console.log('bookmarks loaded...');
+	$scope.bookmarksLoaded = function($scope, timeE) {
+		console.log('bookmarks loaded in[  '+ timeE +'  ]ms...');
 		$( document ).ready(function() {
     		console.log( 'ready!' );
 		});
@@ -32,6 +32,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 		//handles links that have broken or non-existent favicons
   		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  		//taking this out for now, may be needed after testing
 		// function handleError(){
 		// 	console.log('handled?');
 		// 	$(this).attr('src', '../images/missing.png');
@@ -45,23 +46,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//JQuery UI code for making bookmarks SORTABLE/DRAGGABLE
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#linkList').sortable();
-		//JQuery UI initializes ACCORDION on folders
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		// function initAccordion(){ 
-		// 	console.log($scope.folders, typeof $scope.folders);
-		// 	var onlyFolders = $scope.folders;
-		// 	console.log(onlyFolders);
-		// 	onlyFolders.forEach(function(f){
-		// 		console.log(f);
-		// 		$('#fol-'+f.id).accordion({
-		// 		 	animate: 'easeOutQuint',
-		// 		 	collapsible: true,
-		// 		 	heightStyle: 'content'
-		// 		});
-		// 	});
 
-		// }
-		// initAccordion();
 
 		//set occupied to false initially so that only folders can be dropped
 		var occupied = false;
@@ -138,6 +123,18 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		initDropzone();
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+		function disableAddButtons(){
+    		$('#addLink').prop('disabled', true);
+    		$('#addAll').prop('disabled', true);	
+		}
+		function enableAddButtons(){
+	    	$('#addLink').prop('disabled', false);
+    		$('#addAll').prop('disabled', false);		
+		}
+
+
+
 		//remove the success alert for adding links and folders
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function removeAlert(){
@@ -148,10 +145,17 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+		// $('#queryInput').on('keyup change', function(e){
+		// 	console.log('input changes');
+		// 	folderMod();
+		// });
+
 		//ADD BOOKMARK - click handler/function for adding current tab to bookmarks
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#addLink').on('click', function(e){
 			// $scope.linkDest 
+			disableAddButtons();
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
 				console.log(tabs);
 			    var url = tabs[0].url;
@@ -162,17 +166,25 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			    $scope.currUrl = url;
 			    console.log(url, $scope.currUrl, title, $scope.currTitle);
 
-			    // chrome.bookmarks.create(bookmark, function(data){
-			    // 	console.log(data);
-			    // });
 			});
+
 			//filter the results by folder
 			$('#folderCheckbox').prop('checked', true);
 			$scope.checkboxModel = { value: true };
-			$scope.$apply()
-			// $('#folderCheckbox').removeClass('ng-pristine ng-untouched ng-empty');
-			// $('#folderCheckbox').addClass('ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched');
+			$scope.$apply();
 
+			folderMod();
+			$scope.folderMod = { value: true };
+
+			$('#linkNameInput, #linkNameSubmit, #linkDestInput, #linkNameCancel').removeClass('hide-class');
+			$('#linkNameInput').focus();
+			$('#addBox').removeClass('hide-class');
+			// $('#addFormBox').removeClass('hide-class');
+			$('#addBox').stop().animate({height:'+=67px'},300,'easeOutQuint', function(){$('#addFormBox').removeClass('hide-class');});
+			// $('#addBox').stop().animate({height:'+=67px'},600,'easeOutQuint');
+		});
+
+		function folderMod(){
 			var onlyFolders = $scope.folders;
 			console.log(onlyFolders);
 			onlyFolders.forEach(function(f){
@@ -180,15 +192,8 @@ $('#container').imagesLoaded().fail( function( instance ) {
 				$('#but-'+f.id).val('add');
 				$('#but-'+f.id).addClass('addto');
 				// $('#fol-'+f.id).append()
-			});
-
-			$('#linkNameInput, #linkNameSubmit, #linkDestInput').removeClass('hide-class');
-			$('#linkNameInput').focus();
-			$('#addBox').removeClass('hide-class');
-			// $('#addFormBox').removeClass('hide-class');
-			$('#addBox').stop().animate({height:'+=67px'},300,'easeOutQuint', function(){$('#addFormBox').removeClass('hide-class');});
-			// $('#addBox').stop().animate({height:'+=67px'},600,'easeOutQuint');
-		});
+			});			
+		}
 
 		var linkDest = '';
 		function pickDestFolder(id){
@@ -202,9 +207,63 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 		}
 
-		$('#linkNameSubmit').on('click', function(){
+		function onSuccess(desTitle, newLinkData){
+			console.log('TITLE: '+desTitle, newLinkData);
+			// $('#linkDestInput option:selected').text()
+	    	$('#alertBox').append('<p class="success1Link title">'+newLinkData.title.substr(0,60)+'</p><p class="success1Link urlAdded">'+newLinkData.url.substr(0,58)+'</p><p class="success1Link destAdded">Added to: '+desTitle+'</p>');
+	    	setTimeout(function(){ 
+	    		removeAlert(); 
+	    		enableAddButtons();
+		    	$('#folderCheckbox').prop('checked', false);
+				$scope.checkboxModel = { value: false };
+				$scope.$apply();
+	    	}, 2400);			
+		}
+
+		function addBoxRemove(data, linkDest, linkCreated){
+	    	console.log(data);
+	    	var newLinkData = data;
+	    	$('#destFolderName').text('');
+	    	console.log(new Date(newLinkData.dateAdded));
+			$('#linkNameInput, #linkNameSubmit, #linkDestInput').addClass('hide-class');
+			$('#addBox').animate({height:'-=67px'},500,'easeOutQuint');
+			$('#addBox').addClass('hide-class');
+			$('#addFormBox').addClass('hide-class');
+
+			var onlyFolders = $scope.folders
+			onlyFolders.forEach(function(f){
+				console.log(f);
+				$('#but-'+f.id).val('open all');
+				$('#but-'+f.id).removeClass('addto');
+			});
+			$scope.folderMod = { value: false };
+
+			if(!linkCreated){
+				enableAddButtons();
+			}
+
+			if(linkCreated){
+				$('#alertBox').addClass('alert-suxess');
+				$('#alertBox').removeClass('hide-class');
+				$('#alertBox').stop().animate({height:'+=50px'},500,'easeOutQuint');
+				enableAddButtons();					
+
+		    	chrome.bookmarks.get(linkDest, function(data){
+		    		console.log(data[0].title);
+		    		var desTitle = data[0].title;
+		    		onSuccess(desTitle, newLinkData);
+		    	});
+			}
+
+
+		}
+
+
+		function saveLink(e){
+			console.log(e);
 			var linkName = $('#linkNameInput').val();
 			// var linkDest = $('#linkDestInput').val();
+			var scopeDest = linkDest;
 			console.log(linkName, linkDest);
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
 				console.log(tabs);
@@ -216,44 +275,17 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			    console.log(bookmark, bookmark.parentId, bookmark.title, bookmark.url);
 
 			    chrome.bookmarks.create(bookmark, function(data){
-			    	console.log(data);
-			    	$('#destFolderName').text('');
-			    	console.log(new Date(data.dateAdded));
-					$('#linkNameInput, #linkNameSubmit, #linkDestInput').addClass('hide-class');
-					$('#addBox').animate({height:'-=40px'},500,'easeOutQuint');
-					$('#addBox').addClass('hide-class');
-					$('#addFormBox').addClass('hide-class');
-					$('#alertBox').addClass('alert-suxess');
-					$('#alertBox').removeClass('hide-class');
-					$('#alertBox').stop().animate({height:'+=50px'},500,'easeOutQuint');
-
-					var onlyFolders = $scope.folders
-					onlyFolders.forEach(function(f){
-						console.log(f);
-						$('#but-'+f.id).val('open all');
-						$('#but-'+f.id).removeClass('addto');
-
-						// $('#fol-'+f.id).append()
-					});					
-
-					function onSuccess(title){
-						console.log('TITLE: '+title, data);
-						// $('#linkDestInput option:selected').text()
-				    	$('#alertBox').append('<p class="success1Link title">'+data.title.substr(0,60)+'</p><p class="success1Link urlAdded">'+data.url.substr(0,58)+'</p><p class="success1Link destAdded">Added to: '+title+'</p>');
-				    	setTimeout(function(){ removeAlert(); }, 2400);			
-					}
-
-			    	// var destTitle = '';
-			    	chrome.bookmarks.get(linkDest, function(data){
-			    		console.log(data[0].title);
-			    		var destTitle = data[0].title;
-			    		onSuccess(destTitle);
-			    	});
-
-
+			    	var linkCreated = true;
+			    	console.log(data, scopeDest);
+			    	addBoxRemove(data, scopeDest, linkCreated);
 			    });
-			});	
-		});
+			});
+		}
+
+		$('#linkNameSubmit').on('click', saveLink);
+		$('#linkNameCancel').on('click', {linkCreated: false}, addBoxRemove);
+
+
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		//ADD ALL LINKS - click handler/function that prompts user for name and
@@ -263,6 +295,8 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//processes clicking the add all button and displays the name input form
 		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		$('#addAll').on('click', function(){
+			$('#addLink').prop('disabled', true);
+			$('#addAll').prop('disabled', true);
 			// var folderName = prompt('Name the folder.');
 			$('#folderNameInput').removeClass('hide-class').focus();
 			$('#folderNameSubmit').removeClass('hide-class');
@@ -321,7 +355,11 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 			    		});
 			    	});
-			    	setTimeout(function(){ removeAlert(); }, 2400);
+			    	setTimeout(function(){ 
+			    		removeAlert();
+						$('#addLink').prop('disabled', false);
+						$('#addAll').prop('disabled', false);
+			    	}, 2400);
 			    }
 
 			});
@@ -687,7 +725,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 
 	$scope.fetchBookMarks = function(){
-		// timeS = new Date().getTime();
+		timeS = new Date().getTime();
 		// console.log(timeS);
 		$scope.waiting = true;
 		var x = 1;
@@ -701,9 +739,9 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		$scope.waiting = false;
 		$scope.links = marks;
 		$scope.folders = folders;
-		// var timeE = new Date().getTime() - timeS;
-		// console.log(timeE);
-		$scope.bookmarksLoaded($scope);
+		var timeE = new Date().getTime() - timeS;
+		console.log(timeE);
+		$scope.bookmarksLoaded($scope, timeE);
 		// $scope.populateAutocomplete();
 	}
 	$scope.fetchBookMarks();
