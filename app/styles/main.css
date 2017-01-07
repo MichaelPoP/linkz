@@ -66,10 +66,12 @@ li>a:hover {
 
 #addLink {
 	padding: 7.7px 23px;
+	font-size: 1.5em;
 }
 
 #addAll {
 	padding: 7.7px 23px;
+	font-size: 1.5em;
 }
 
 #folderCheckbox {
@@ -323,8 +325,8 @@ li.linkItem:hover {
 
 }
 
-.dropped-state {
-	box-shadow: inset 2px 2px 36px 5px rgba(27,220,53,1);	
+.moving-state {
+	box-shadow: inset 1px 1px 36px 15px rgba(27,220,53,0.8);	
 }
 
 

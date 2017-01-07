@@ -45,55 +45,68 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//note: still need to write behavior for switching the occupying folder
 		function initDropzone(id){
 			console.log(occupied, id);
-			//when dropzone is occupied it is set to true & only accepts links
+			//when folder is in dropzone occupied is true, links and folders can be dropped
 			//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 			if(occupied === true){
 				$('#folderDrop').droppable({
 					//for accepting only bookmarks
-					accept: 'li[data*=false]',
+					accept: 'li[data*=false], li[data*=true]',
 					// accept: 'li',
 					tolerance: 'touch',
 			      	drop: function(event, ui) {
-			      		console.log(event, ui);
-			      		console.log(ui.draggable[0].innerText);
-			      		// var props = {'background': '#7EF1ED'};
-			      		var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
-			      		console.log(String(ui.draggable[0].attributes.id.value.substr(4)));
-			      		//here the dropped link is actually moved to folder
-			      		chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(id)}, function(data){
-			      			console.log('moved', data);
-			      		});
+			      		console.log(event, ui, ui.draggable[0].innerText);
+			      		var folderId = id;
 
-			      		$('#folderDrop').children().addClass('hide-class');
+			      		// checks if dropped item is link or folder 
+						if(ui.draggable[0].attributes.data.value === 'false'){
+							// if its a link then go ahead and move it
 
-			        	$('#folderDrop')
-			        		.addClass('dropped-state')
-			          		// .find('span')
-			            	.append('<p id="droppedMark">'+ui.draggable[0].innerText+'</p>')
-			            	.animate(props1,1000,'easeOutQuint');
-			            	setTimeout(function(){ 
-			            		// var props = {'background': '#93DDF1'};
-			            		var props2 = {color:'hex(#000)', borderColor:'hex(#05B6FF)'};
-			            		var remProps = {'opacity': 0};
-			            		$('#droppedMark').remove().animate(remProps, 1000, 'easeOutQuint');
-			            		$('#folderDrop').children().removeClass('hide-class');
-			            		$('#folderDrop').removeClass('dropped-state').addClass('occupied-state');
-			            		// console.log($contents);
-			            		// contents.appendTo('#folderDrop');
-			            		$('#folderDrop').animate(props2, 1000, 'easeOutQuint');
-			            	}, 2500);
-			            initDropzone();
+							var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
+							console.log('Dragger ID: ',String(ui.draggable[0].attributes.id.value.substr(4)));
+							console.log('Folder ID: ', folderId);
+
+
+							//here the dropped link is actually moved to folder
+							chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(folderId)}, function(data){
+								console.log('MOVED > ', data);
+							});
+
+							$('#folderDrop').children().addClass('hide-class');
+
+							$('#folderDrop')
+								.addClass('moving-state')
+									// .find('span')
+								.append('<p id="droppedMark">'+ui.draggable[0].innerText+'</p>')
+								.animate(props1,1000,'easeOutQuint');
+								setTimeout(function(){ 
+									// var props = {'background': '#93DDF1'};
+									var props2 = {color:'hex(#000)', borderColor:'hex(#05B6FF)'};
+									var remProps = {'opacity': 0};
+									$('#droppedMark').remove().animate(remProps, 1000, 'easeOutQuint');
+									$('#folderDrop').children().removeClass('hide-class');
+									$('#folderDrop').removeClass('moving-state').addClass('occupied-state');
+									// console.log($contents);
+									// contents.appendTo('#folderDrop');
+									$('#folderDrop').animate(props2, 1000, 'easeOutQuint');
+								}, 2500);
+							initDropzone(folderId);
+
+						} else {
+							// if it is another folder we need to update the title and re-initialize the dropzone
+							occupied = true;
+							$(this).html('<p class="folderTitle">drag links to add to folder: '+ui.draggable[0].title+'</p>')
+							initDropzone(ui.draggable[0].attributes.id.value.substr(4));
+						}
 			      	}
 			    });
 			} else {
-				//condition initializes the dropzone for link dropping
+				//when nothing is in dropzone, occupied is false, only folders can be added
 				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				$('#folderDrop').droppable({
 					accept: 'li[data*=true]',
 					tolerance: 'touch',
 			      	drop: function(event, ui) {
-			      		console.log(event, ui);
-			      		console.log(ui.draggable[0].textContent);
+			      		console.log(event, ui, ui.draggable[0].textContent);
 			      		var props = {'height': '44px', 'width':'432px',backgroundColor:'hex(#FFF)',color:'hex(#000)',borderColor:'hex(#05B6FF)'};
 			        	$(this)
 			        		.addClass('occupied-state')
