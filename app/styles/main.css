@@ -24,31 +24,52 @@ li>input {
 li>a {
 	font-size: 13px;
 	color: blue;
+	margin-bottom: 2px;
+	width: 95%;
 }
 li>a:hover {
 	font-size: 14px;
 	color: green;
 }
+.linkItem a:first-of-type {
+	margin-top: 4px;
+}
 
+.hide-class {
+	color: white;
+	display: none;
+	visibility: hidden;
+}
 
 /* POPUP */
-
-
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* HEADER BOX */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* holds all the static stuff at the top */
 /* -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 #queryBox {
 	padding: 4px;
-
+	border-bottom: 1px solid #C1C1C1;
+	box-shadow: 0px -3px 6px 4px rgba(0, 0, 0, 0.5);
+	position: relative;
 }
 
 #queryInput {
 	margin-top: 1px;
-	margin-bottom: 6px;
+	/* margin-bottom: 6px; */
 	width: 50%;
-	height: 2.2em;
+	height: 43px;
 	font-size: 17px;
 	font-weight: 700;
+}
+
+#addLink {
+	padding: 7.7px 23px;
+}
+
+#addAll {
+	padding: 7.7px 23px;
 }
 
 #folderCheckbox {
@@ -70,13 +91,13 @@ li>a:hover {
 	height: 0px;
 }
 
-
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* ADD BOX */
-/* stuff for adding a single link */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/* styling for the box that adds links */
 /* -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
-/* #linkDestInput {
 
-} */
 #addBox {
 	margin-top: 7px;
 
@@ -106,6 +127,7 @@ input[id*='NameSubmit']:hover {
 	font-size: 16px;
 	margin-left: 24px;
 	text-align: left;
+	font-weight: 700;
 }
 
 .destPre {
@@ -126,29 +148,30 @@ input[id*='NameSubmit']:hover {
 
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
-
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* BODY */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* font-family: 'Exo', sans-serif; */
 
 
 .titleInput {
 	width: 60%;
-	height: 2em;
+	height: 43px;
 	margin-left: 13px;
 	font-size: 16px;
 	font-weight: 900;
 	color: #01136D;
 }
 
-.folderTitle {
-	font-size: 1.7em;
-	font-weight: 800;
-	margin-bottom: -6px;
+.linkTitle {
+
 }
 
 
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* ALERT STUFF */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 
 .alert-suxess {
 	color: #468B48;
@@ -190,6 +213,7 @@ input[id*='NameSubmit']:hover {
 	left: 15px; */
 }
 
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 
 
 
@@ -219,77 +243,97 @@ input[id*='NameSubmit']:hover {
 }
 .linkItem {
 	/* max-height: 100px; */
-	border: 1px inset #BAD8DF;
+	border: 1px outset #BAD8DF;
 	color: #BADA55;
 	border-radius: 1px;
 	margin-left: -20px;
 	padding: 5px;
 	list-style-type: none;
-
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100 */
-	background: rgb(238,238,238); /* Old browsers */
-	background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
-
-
-	/* box-shadow: none|h-shadow v-shadow blur spread color |inset|initial|inherit; */
-	/* box-shadow: 1px 1px 2px 2px #23C9F6; */
-	/* -webkit-box-reflect: below 0 -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(rgba(255, 255, 255, 0.3))) 0 0 0 0 stretch stretch; */
-}
-
-.openAllBtn {
-	margin-left: 7px;
-	float: right;
+	background: linear-gradient(to bottom,  rgba(238,238,238,0.3) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 }
 
 li.linkItem:hover {
-	/* height: 60px; */
-	border: 2px outset #56A9BF;
-
-
+	background: linear-gradient(to bottom,  rgba(238,238,238,0) 50%,rgba(238,238,238,1) 100%);
+	border: 1px inset #ACF4FF;
 
 }
 
-.dropBoxes {
-	width: 140px;
-	padding: 8px;
-	border: 3px solid #7D8F9E;
-}
-#anyDrop {
-	float: left;
-}
 
-#folderDrop {
+.openAllBtn {
+	margin-left: 7px;
 	float: right;
+}
+
+.update-submit {
+	position: relative;
+	float: right;
+	margin: -65px 30px 0px 0px;
+
+}
+
+
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/* DropZone Styling */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+#buttonDeck {
+	border-top: 1px solid #C1C1C1;
+	box-shadow: 0px 3px 3px 3px rgba(0, 0, 0, 0.5);
+	position: relative;
+}
+#folderDrop {
+	/* float: right; */
 	/* display: block; */
 	/* border: 2px solid #7D8F9E; */
 	/* box-sizing: border-box; */
 }
+
+/* styling before folder is dropped */
+.dropBox {
+	width: 100%;
+	height: 24px;
+	font-size:1.3em;
+	font-weight: 800;
+	font-variant: small-caps;
+	/* padding: 10px; */
+	border: 1px solid #7D8F9E;
+	text-shadow: 2px 2px 3px #E3E3E3, -2px -2px 3px #E3E3E3;
+	/* offset-x | offset-y | blur-radius | color */
+	/* text-shadow: 1px 1px 2px black; */
+}
+.dropBox:hover {
+	background: ghostwhite;
+}
+
 .occupied-state {
-	/* background: #93DDF1; */
-	/* box-shadow: #05B6FF */
--webkit-box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
--moz-box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
-box-shadow: inset 0px 0px 34px -4px rgba(5,182,255,1);
+	width: 100%;
+	height: 24px;
+	border: 1px solid #7D8F9E;
+	box-shadow: inset 1px 1px 36px 15px rgba(5,182,255,0.8), inset -1px -1px 36px 15px rgba(5,182,255,0.8);
 }
+
+/* title of folder that is dropped */
+.folderTitle {
+	font-size: 1.3em;
+	font-weight: 800;
+	font-variant: small-caps;
+	margin-bottom: -3px;
+	margin-top: 3px;
+
+}
+
 .dropped-state {
--webkit-box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
--moz-box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
-box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);	
-}
-.hide-class {
-	color: white;
-	display: none;
-	visibility: hidden;
+	box-shadow: inset 2px 2px 36px 5px rgba(27,220,53,1);	
 }
 
 
 
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* CUSTOM BOOTSTRAP BUTTON STUFF */
-
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 .btn {
     padding: 7.7px 10px;
     border: 0 none;
@@ -309,6 +353,7 @@ box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
 	font-size: 12px;
     background: #94C0CC;
     color: #ffffff;
+    height: 43px;
 }
 .btn-primary.addto {
 	background: #58B05C;
@@ -329,20 +374,18 @@ box-shadow: inset 0px 0px 34px -4px rgba(27,220,53,1);
 	background: #FFF;
 	border: 2px solid #D3DEE9;
 	color: rgba(237,29,29,0.54);
+	height: 43px;
+	z-index: 0;
 
 }
 .btn-default:hover {
 	background: #FDFDFD;
 	color: rgba(255,255,255,0.7);
 	/* #ed1d1d shadow hex val*/
--webkit-box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
--moz-box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
-box-shadow: inset 1px 1px 20px 6px rgba(237,29,29,0.54);
+box-shadow: inset 1px 1px 30px 10px rgba(237,29,29,0.54);
 }
 .greenHov:hover {
--webkit-box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
--moz-box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
-box-shadow: inset 1px 1px 20px 6px rgba(12,179,4,1);
+box-shadow: inset 1px 1px 30px 10px rgba(12,179,4,1);
 }
 
 

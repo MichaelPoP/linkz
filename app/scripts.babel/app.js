@@ -30,18 +30,6 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		});
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-		//handles links that have broken or non-existent favicons
-  		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  		//taking this out for now, may be needed after testing
-		// function handleError(){
-		// 	console.log('handled?');
-		// 	$(this).attr('src', '../images/missing.png');
-		// 	// '../images/missing.png'; ???
-		// }
-		// $(document).ready(function () {
-		//     $('img').on('error', handleError);
-		// });
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 		//JQuery UI code for making bookmarks SORTABLE/DRAGGABLE
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,6 +58,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			      		console.log(ui.draggable[0].innerText);
 			      		// var props = {'background': '#7EF1ED'};
 			      		var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
+			      		console.log(String(ui.draggable[0].attributes.id.value.substr(4)));
 			      		//here the dropped link is actually moved to folder
 			      		chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(id)}, function(data){
 			      			console.log('moved', data);
@@ -104,13 +93,14 @@ $('#container').imagesLoaded().fail( function( instance ) {
 					tolerance: 'touch',
 			      	drop: function(event, ui) {
 			      		console.log(event, ui);
-			      		console.log(ui.draggable[0].innerText);
-			      		var props = {'height': '60px', 'width':'290px',backgroundColor:'hex(#FFF)',color:'hex(#000)',borderColor:'hex(#05B6FF)'};
+			      		console.log(ui.draggable[0].textContent);
+			      		var props = {'height': '44px', 'width':'432px',backgroundColor:'hex(#FFF)',color:'hex(#000)',borderColor:'hex(#05B6FF)'};
 			        	$(this)
 			        		.addClass('occupied-state')
+			        		.removeClass('dropBox')
 			          		// .find('span')
-			            	.html('<p class="folderTitle">'+ui.draggable[0].innerText+'</p>')
-			            	.append('<p>drag a bookmark here to add it the folder</p>')
+			            	.html('<p class="folderTitle">drag links to add to folder: '+ui.draggable[0].title+'</p>')
+			            	// .append('<p>title: '+ui.draggable[0].title+'</p>')
 			            	.animate(props,1000,'easeOutQuint');
 			            occupied = true;
 			            initDropzone(ui.draggable[0].attributes.id.value.substr(4));
@@ -295,18 +285,27 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//processes clicking the add all button and displays the name input form
 		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		$('#addAll').on('click', function(){
-			$('#addLink').prop('disabled', true);
-			$('#addAll').prop('disabled', true);
+			disableAddButtons();
 			// var folderName = prompt('Name the folder.');
 			$('#folderNameInput').removeClass('hide-class').focus();
 			$('#folderNameSubmit').removeClass('hide-class');
+			$('#folderNameCancel').removeClass('hide-class');
 			$('#folderBox').removeClass('hide-class');
 			$('#folderBox').stop().animate({height:'+=48px'},1000,'easeOutQuint');
 		});
 
-		//after choosing folder name user clicks submit function
+		//after choosing folder name user clicks submit or cancel
 		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-		$('#folderNameSubmit').on('click', function(){
+		$('#folderNameSubmit').on('click', saveFolder);
+		$('#folderNameCancel').on('click', folderBoxRemove)
+
+		function folderBoxRemove(){
+    		$('#folderBox').animate({height:'-=48px'},1000,'easeOutQuint');
+    		$('#folderBox').addClass('hide-class');
+    		enableAddButtons();
+		}
+
+		function saveFolder(){
 			var folderName = $('#folderNameInput').val();
 			//queries currently open tabs & sets equal to tabs
 			chrome.tabs.query({'lastFocusedWindow': true}, function (tabs) {
@@ -330,13 +329,13 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			    		$('#alertBox').addClass('alert alert-danger');
 			    	}
  
-			    		$('#folderBox').animate({height:'-=48px'},1000,'easeOutQuint');
-			    		$('#folderBox').addClass('hide-class');
+						folderBoxRemove();
 			    		
 			    		$('#alertBox').stop().animate(props,1000,'easeOutQuint');
 			    		// {height:'+=48px'}
 			       	
 			    });
+
 
 			    //loops through tabs and creates bookmarks in the given folder
 			    //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
@@ -357,14 +356,13 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			    	});
 			    	setTimeout(function(){ 
 			    		removeAlert();
-						$('#addLink').prop('disabled', false);
-						$('#addAll').prop('disabled', false);
+						enableAddButtons();
 			    	}, 2400);
 			    }
 
 			});
 
-		});//ON CLICK CALLBACK END
+		}
 
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -390,10 +388,14 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 
 
-	//HERE LIES THE ONLY WAY I COULD FIGURE OUT HOW TO HANDLE ALL EVENTS WITH ONE HANDLER
+
+
+
+		//HERE LIES THE ONLY WAY I COULD FIGURE OUT HOW TO HANDLE ALL EVENTS WITH ONE HANDLER
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//Adds an event listener to the element that contains the bookmark list
 		$('#linkBox').on('click', processAction);
+		$('#linkBox').on('mouseover', processMouseover)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -401,26 +403,28 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function processAction(e){
 			console.log(e);
+			var tgt = e.target;
 			// console.log(e.target.url, e.target.id.substr(0,3), e.target.attributes.data.value);
-			if(e.target.attributes.class.value.substr(0,6) == 'delete'){
+			if(tgt.attributes.class.value.substr(0,6) == 'delete'){
 				removeBookmark(e);		
-			} else if(e.target.id.substr(0,3) === 'but'){
-				console.log(e.target.attributes.class.value);
-				if(e.target.attributes.class.value.includes('submit')){
+			} else if(tgt.id.substr(0,3) === 'but'){
+
+				console.log(tgt.attributes.class.value);
+				if(tgt.attributes.class.value.includes('submit')){
 					updateTitleSubmit(e);
-				} else if(e.target.attributes.class.value.includes('addto')){
-					pickDestFolder(e.target.id);
+				} else if(tgt.attributes.class.value.includes('addto')){
+					pickDestFolder(tgt.id);
 				} else {
-					openAllFolderMarks(e.target.id.substr(4));
+					openAllFolderMarks(tgt.id.substr(4));
 				}
 				
-			} else if(e.target.attributes.data.value === 'true') {
+			} else if(tgt.attributes.data.value === 'true') {
 				getFolderMarks(e);
-			} else if(e.target.id === 'cancelRemove'){
+			} else if(tgt.id === 'cancelRemove'){
 				processCancel(e);
-			} else if (e.target.id === 'confirmRemove'){
+			} else if (tgt.id === 'confirmRemove'){
 				processRemoval(e);
-			} else if (e.target.attributes.data.value === 'update'){
+			} else if (tgt.attributes.data.value === 'update'){
 				updateTitle(e);
 			} else {
 				e.stopPropagation();
@@ -429,6 +433,45 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+		//Processes the event when user hovers over sublinks in open folder
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		function processMouseover(e){
+			if(e.target.id.substr(0,7) == 'sublink'){
+				showLinkTitle(e.target.id);
+			}
+
+		}
+
+		function showLinkTitle(id){
+			// console.log(recentMarksOpened);
+
+			var result = $.grep(recentMarksOpened, function(e){
+
+				return e.id == id.substr(8);
+			});
+
+			if (result.length == 0) {
+				console.log('no results');
+			  // not results
+			} else if (result.length == 1) {
+			  // access the foo property using result[0].foo
+			  var linkTitle = result[0].title;
+			  console.log(linkTitle);
+			} else {
+			  // multiple items found
+			  console.log('multiple items found');
+			}
+
+			$('#'+id).text(linkTitle.substr(0,48));
+
+			$('#'+id).on('mouseout', function(e){
+				$('#'+id).text(result[0].url.substr(0,50));
+			})
+
+
+		}
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 		var elementId, bookmarkId, remContent;
@@ -533,7 +576,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
+		var recentMarksOpened = [];
 		//GET BOOKMARKS FOR A FOLDER - (process click on folder event)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function getFolderMarks(e) {
@@ -565,8 +608,9 @@ $('#container').imagesLoaded().fail( function( instance ) {
 							//Appends an link element for each bookmark in the selected folder
 							//doesn't display folders inside folders
 							if(mark.url){
-								$('#'+e.target.id).append('<br><a href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+								$('#'+e.target.id).append('<br><a id="sublink-'+mark.id+'" href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
 							}
+							recentMarksOpened.push(mark);
 							
 						});
 						// var height = (marks.length * 15)+58+'px';
@@ -593,6 +637,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			setTimeout(function(){ 
 				$('#'+id).children('a').remove();
 				$('#'+id).children('br').remove();
+				recentMarksOpened = [];
 			}, 100);
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -610,40 +655,73 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			});
 		}
 
+
+		//UPDATE TITLE - (processes click on items title span)
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		function updateTitle(e){
+			console.log(e.target.id);
+			if(e.target.parentElement.attributes.class.value.includes('open')){
+				console.log('folder must be closed!');
+			} else {
+				console.log('updating',e.target.id);
+				console.log('target is:',e.target.parentElement.attributes.data.value == true ? 'a folder' : 'not a folder');
+				var itemId = e.target.id.substr(4);
+				console.log(itemId);
+				var inputId = 'inp-'+itemId;
+				$('#'+e.target.id).addClass('hide-class');
+				$('#'+inputId).removeClass('hide-class');
+
+				if(e.target.parentElement.attributes.data.value === 'false'){
+					console.log('append?', e.target.parentElement.attributes.id);
+
+					$('#'+e.target.parentElement.attributes.id.value).append('<input id="but-'+itemId+'" type="button" class="btn btn-primary submit update-submit" value="submit">');
+					// <input ng-if="!link.url && !folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
+				} else {
+					console.log(' no append..');
+					$('#but-'+itemId).val('submit');
+					$('#but-'+itemId).addClass('submit');
+				}
+
+				setTimeout(function(){ $('#'+inputId).focus();$('#'+inputId).select(); }, 1000);
+				// $('#'+e.target.id).append('<input type="text" value="'+e.target.id+'">');	
+			}
+
+		}
+
+		function updateInputRemove(id, data, is_folder){
+			console.log(id, data, is_folder);
+			$('.titleInput').addClass('hide-class');
+			$('.linkTitle').removeClass('hide-class');
+			if(is_folder === 'true'){
+				console.log('FOLDER teardown');
+				$('.submit').val('open all');
+				$('.submit').removeClass('submit');			
+			} else {
+				console.log('LINK teardown');
+				$('#but-'+id).remove();
+			}
+			console.log(data.title, $('#tit-'+id));
+			$('#tit-'+id).text(data.title);
+
+		}
+
 		function updateTitleSubmit(e){
+			console.log(e);
 			var id = e.target.id.substr(4);
+			var is_folder = e.target.parentElement.attributes.data.value;
+			console.log(id, is_folder);
     		var bookmark = new Object();
     		bookmark.title = $('#inp-'+id).val();
 
     		console.log(bookmark);
     		chrome.bookmarks.update(String(id), bookmark, function(data){
     			console.log('data->',data);
+    			updateInputRemove(id, data, is_folder);
 
     		});
 		}
 
-
-		//UPDATE TITLE - (processes click on items title span)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		function updateTitle(e){
-			console.log('updating',e.target.id);
-			console.log(e.target);
-			var itemId = e.target.id.substr(4);
-			console.log(itemId);
-			var inputId = 'inp-'+itemId;
-			
-			$('#'+e.target.id).addClass('hide-class');
-			$('#'+inputId).removeClass('hide-class');
-
-			$('#but-'+itemId).val('submit');
-			$('#but-'+itemId).addClass('submit');
-
-
-			setTimeout(function(){ $('#'+inputId).focus();$('#'+inputId).select(); }, 1000);
-			// $('#'+e.target.id).append('<input type="text" value="'+e.target.id+'">');
-
-		}
-
 
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
