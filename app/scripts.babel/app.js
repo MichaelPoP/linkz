@@ -42,7 +42,6 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 		//initiates the dropzone and switches mode depending on what is dropped
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		//note: still need to write behavior for switching the occupying folder
 		function initDropzone(id){
 			console.log(occupied, id);
 			//when folder is in dropzone occupied is true, links and folders can be dropped
@@ -447,46 +446,6 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-		//Processes the event when user hovers over sublinks in open folder
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		function processMouseover(e){
-			if(e.target.id.substr(0,7) == 'sublink'){
-				showLinkTitle(e.target.id);
-			}
-
-		}
-
-		function showLinkTitle(id){
-			// console.log(recentMarksOpened);
-
-			var result = $.grep(recentMarksOpened, function(e){
-
-				return e.id == id.substr(8);
-			});
-
-			if (result.length == 0) {
-				console.log('no results');
-			  // not results
-			} else if (result.length == 1) {
-			  // access the foo property using result[0].foo
-			  var linkTitle = result[0].title;
-			  console.log(linkTitle);
-			} else {
-			  // multiple items found
-			  console.log('multiple items found');
-			}
-
-			$('#'+id).text(linkTitle.substr(0,48));
-
-			$('#'+id).on('mouseout', function(e){
-				$('#'+id).text(result[0].url.substr(0,50));
-			})
-
-
-		}
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 		var elementId, bookmarkId, remContent;
 		//processes the action of clicking remove bookmark
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -590,10 +549,43 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 
 		var recentMarksOpened = [];
+		var lastFolderId;
+		//Processes the event when user hovers over sublinks in open folder
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		function processMouseover(e){
+			if(e.target.id.substr(0,7) == 'sublink'){
+				showLinkTitle(e.target.id);
+			}
+		}
+
+		function showLinkTitle(id){
+			var result = $.grep(recentMarksOpened, function(e){
+				return e.id == id.substr(8);
+			});
+
+			if (result.length == 0) {
+				console.log('no results');
+			} else if (result.length == 1) {
+			  var linkTitle = result[0].title;
+			  console.log('one result: ',linkTitle);
+			} else {
+			  console.log('multiple items found');
+			  var linkTitle = result[0].title;
+			}
+
+			$('#'+id).text(linkTitle.substr(0,48));
+
+			$('#'+id).on('mouseout', function(e){
+				$('#'+id).text(result[0].url.substr(0,50));
+			})
+		}
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 		//GET BOOKMARKS FOR A FOLDER - (process click on folder event)
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function getFolderMarks(e) {
-
+			
 			if (e.target.id == '') {console.log('its a link');return;}
 
 		    if (e.target !== e.currentTarget) {
@@ -606,10 +598,17 @@ $('#container').imagesLoaded().fail( function( instance ) {
 					console.log('CLOSE');
 					var props = {'height': '50px'};
 					// $('#'+folderId).animate(props,1000,'easeOutQuint', removeUrls(folderId));
-					removeUrls(folderId)
+					removeUrls(folderId);
 					$('#'+folderId).removeClass('open');
+					recentMarksOpened = [];
 				} else {
-					console.log('OPEN');
+					console.log('OPEN', folderId, lastFolderId);
+
+					if(folderId !== lastFolderId){
+						console.log(folderId, lastFolderId);
+						$('#'+lastFolderId).removeClass('open');
+						removeUrls(lastFolderId);
+					}
 					// console.log($('#'+folderId).height(), 'LESS THAN 50');
 					chrome.bookmarks.getChildren(String(folderId.substr(4)), function(marks){
 						// console.log(marks);
@@ -624,6 +623,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 								$('#'+e.target.id).append('<br><a id="sublink-'+mark.id+'" href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
 							}
 							recentMarksOpened.push(mark);
+							console.log(recentMarksOpened);
 							
 						});
 						// var height = (marks.length * 15)+58+'px';
@@ -632,9 +632,12 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 						// $('#'+folderId).css({display:'block'}).addClass('open');
 						$('#'+folderId).addClass('open');
+
+						// $('li[data=true]').removeClass('open');
+						
 						// console.log($('#'+folderId));
 						// $('#'+folderId).animate(props,1000,'easeOutQuint');
-
+						lastFolderId = folderId;
 					});
 				}
 
@@ -650,7 +653,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 			setTimeout(function(){ 
 				$('#'+id).children('a').remove();
 				$('#'+id).children('br').remove();
-				recentMarksOpened = [];
+				// recentMarksOpened = [];
 			}, 100);
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
