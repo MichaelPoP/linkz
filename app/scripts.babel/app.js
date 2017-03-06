@@ -127,12 +127,43 @@ $('#container').imagesLoaded().fail( function( instance ) {
 
 
 		function disableAddButtons(){
+			toggleAddbuttonStyle();
     		$('#addLink').prop('disabled', true);
+    		// $('#addLink').removeClass('raised')
     		$('#addAll').prop('disabled', true);	
 		}
 		function enableAddButtons(){
+			toggleAddbuttonStyle();
 	    	$('#addLink').prop('disabled', false);
     		$('#addAll').prop('disabled', false);		
+		}
+
+		function toggleAddbuttonStyle(){
+
+			var addLink = $('#addLink');
+			if(addLink.hasClass('raised')){
+			 	addLink.removeClass('raised').addClass('nope');			
+			} else {
+				addLink.removeClass('nope').addClass('raised');
+			}
+
+
+			var addAll = $('#addAll');
+			if(addAll.hasClass('raised')){
+			 	addAll.removeClass('raised').addClass('nope');
+			} else {
+				addAll.removeClass('nope').addClass('raised');
+			}
+
+
+
+			// $('#addLink').toggleClass(function() {
+			//   if ( $(this).is('.raised') ) {
+			//     return 'nope';
+			//   } else {
+			//     return 'raised';
+			//   }
+			// });
 		}
 
 
@@ -222,7 +253,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 	    	}, 2400);			
 		}
 
-		function addBoxRemove(data, linkDest, linkCreated){
+		function addBoxRemove(data, linkCreated){
 	    	console.log(data);
 	    	var newLinkData = data;
 	    	$('#destFolderName').text('');
@@ -250,7 +281,7 @@ $('#container').imagesLoaded().fail( function( instance ) {
 				$('#alertBox').stop().animate({height:'+=50px'},500,'easeOutQuint');
 				enableAddButtons();					
 
-		    	chrome.bookmarks.get(linkDest, function(data){
+		    	chrome.bookmarks.get(data.parentId, function(data){
 		    		console.log(data[0].title);
 		    		var desTitle = data[0].title;
 		    		onSuccess(desTitle, newLinkData);
@@ -271,15 +302,14 @@ $('#container').imagesLoaded().fail( function( instance ) {
 				console.log(tabs);
 
 			    var bookmark = new Object();
-			    bookmark.parentId = linkDest
+			    bookmark.parentId = newLinkDest || linkDest || '1';
 			    bookmark.title = linkName || tabs[0].title;
 			    bookmark.url = tabs[0].url;
 			    console.log(bookmark, bookmark.parentId, bookmark.title, bookmark.url);
 
 			    chrome.bookmarks.create(bookmark, function(data){
 			    	var linkCreated = true;
-			    	console.log(data, scopeDest);
-			    	addBoxRemove(data, scopeDest, linkCreated);
+			    	addBoxRemove(data, linkCreated);
 			    });
 			});
 		}
@@ -379,12 +409,56 @@ $('#container').imagesLoaded().fail( function( instance ) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+		//CREATE NEW FOLDER FOR NEW LINK - click handler/function that prompts user for
+		//name of new folder and sets that as destination folder for add
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		$('#addNewFolder').on('click', newFolderPrompt);
+
+		function newFolderPrompt(e){
+			// $('#newFolderNameInput').removeClass('hide-class');
+		if($('#addBox').hasClass('open')){
+
+		} else {
+			$('#addBox').stop().animate({height:'+=42px'},300,'easeOutQuint', 
+				function(){
+					$('#addBox').addClass('open');
+					$('.nwInputs').removeClass('hide-class');
+			});
+		}
 
 
+		}
+		var newLinkDest = '';
+		function saveNewFolder(e){
+			var folder = new Object();
+			folder.title = $('#newFolderNameInput').val();
 
+			//creates folder object and adds tabs to it
+			//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+		    chrome.bookmarks.create(folder, function(data){
+		    	console.log(data);
+		    	var folderCreated = true;
+		    	newLinkDest = data.id;
+		    	newFolderBoxRemove(folder.title, folderCreated);
+       	
+		    });			
+		}
 
+		$('#newFolderNameSubmit').on('click', saveNewFolder);
+		$('#newFolderNameCancel').on('click', {folderCreated: false}, newFolderBoxRemove);
 
-
+		function newFolderBoxRemove(title, folderCreated){
+			if(folderCreated){
+				$('#destFolderName').text(title);
+			}
+			$('#addBox').stop().animate({height:'-=42px'},300,'easeOutQuint', 
+				function(){
+					$('.nwInputs').addClass('hide-class');
+					$('#addBox').removeClass('open');
+			});
+		
+		}
 
 
 
@@ -467,14 +541,13 @@ $('#container').imagesLoaded().fail( function( instance ) {
 				//added the following setTimeouts so that the animation would work
 				//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 				setTimeout(function(){
-				console.log(elementId); 
+					console.log(elementId); 
 					$('#'+elementId).append('<div id="confirmBox"></div>')
-			
 		 		}, 100);
 		 		setTimeout(function(){ 
 		 			console.log(elementId, bookmarkId, e.target.id.substr(4));
-		 		 	$('#confirmBox').append('<input id="confirmRemove" class="btn btn-default greenHov" style="color:green;" type="button" value="confirm" ng-click="scope.links.splice($index,1)" data="'+elementId+'">')
-					$('#confirmBox').append('<input id="cancelRemove" class="btn btn-default" style="color:red;" type="button" value="cancel" data="'+elementId+'">');
+		 		 	$('#confirmBox').append('<input id="confirmRemove" class="btn btn-default greenHov" type="button" value="confirm" ng-click="scope.links.splice($index,1)" data="'+elementId+'">')
+					$('#confirmBox').append('<input id="cancelRemove" class="btn btn-default redHov" type="button" value="cancel" data="'+elementId+'">');
 		 		 }, 200);
 
 		 		if($('#'+elementId).height() > 49){

@@ -88,9 +88,11 @@ li>a:hover {
 }
 #folderBox {
 	height: 0px;
+	padding: 12px;
 }
 #alertBox {
 	height: 0px;
+	margin-top: 6px;
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -104,12 +106,18 @@ li>a:hover {
 	margin-top: 7px;
 
 }
+.addBoxCells {
+	padding:0px 7px 0px 7px;
+}
+.tPad {
+	padding-top: 25px;
+}
 /* div[id^="as_"]
 div[id^="bs_"] */
 
 input[id*='NameInput'] {
 	width: 95%;
-	height: 38px;
+	height: 43px;
 	border: 1px solid #cdcdcd;
     border-color: rgba(0,0,0,.15);
     background-color: white;
@@ -146,6 +154,10 @@ input[id*='NameSubmit']:hover {
 	margin-top: 2px;
 	font-size: 16px;
 	text-align: left;
+}
+
+#newFolderNameInput {
+	margin-top: 5px;
 }
 
 
@@ -213,6 +225,21 @@ input[id*='NameSubmit']:hover {
 /* 	position: absolute;
 	top: 90px;
 	left: 15px; */
+}
+
+#confirmRemove {
+	color: green;
+}
+#confirmRemove:hover {
+	color: ghostwhite;
+	text-shadow: 0px 1px 1px #FFF;
+}
+#confirmCancel {
+	color: red;
+}
+#confirmCancel:hover {
+	color: ghostwhite;
+	text-shadow: 0px 1px 1px #FFF;
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -380,20 +407,37 @@ li.linkItem:hover {
 	z-index: 0;
 
 }
-.btn-default:hover {
+/* .btn-default:hover {
 	background: #FDFDFD;
 	color: rgba(255,255,255,0.7);
-	/* #ed1d1d shadow hex val*/
-box-shadow: inset 1px 1px 30px 10px rgba(237,29,29,0.54);
-}
-.greenHov:hover {
-box-shadow: inset 1px 1px 30px 10px rgba(12,179,4,1);
+	 #ed1d1d shadow hex val
+	box-shadow: inset 1px 1px 30px 10px rgba(237,29,29,0.54);
+} */
+
+.redHov:hover {
+	animation: goRed 4s ease-out 1;
+	text-shadow: 0px 1px 1px #FFF;
+	color: #F1F1F1;
 }
 
+.greenHov:hover {
+	/* box-shadow: inset 1px 1px 30px 10px rgba(12,179,4,1); */
+	animation: goGreen 4s ease-out 1;
+	text-shadow: 0px 1px 1px #FFF;
+	color: #F1F1F1;
+}
 
 .raised:hover	{
-	color: #5574DC;
+	/* color: #3ECB4C; */
+	animation: goGreen 4s ease-out 1;
+	/* text-shadow: 1px -1px 10px #3ECB4C,-1px 1px 10px #3ECB4C,1px 1px 10px #3ECB4C,-1px -1px 10px #3ECB4C; */
+	text-shadow: 0px 1px 1px #FFF;
+	color: #F1F1F1;
 }
+.nope:hover {
+	animation: goRed 1s cubic-bezier(0.4, 0.2, 0.3, 1.0) infinite;
+}
+
 
 /* raised look for primary class */
 .btn-primary.raised {
@@ -406,3 +450,26 @@ box-shadow: inset 1px 1px 30px 10px rgba(12,179,4,1);
 	color: #007299;
 	/* margin-top: 1px; */
 }
+
+@keyframes goGreen {
+  0% {
+  	#33a6cc
+    background-color: #FFF;
+  }
+  100% {
+    background-color: #3ECB4C;
+  }
+}
+
+@keyframes goRed {
+  0% {
+  	/* #33a6cc */
+    background-color: #FFF;
+  }
+  100% {
+    background-color: #ed1d1d;
+  }
+}
+
+
+
