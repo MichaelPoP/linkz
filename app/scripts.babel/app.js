@@ -5,9 +5,7 @@ var linkzApp = angular.module('linkzApp', ['ngRoute', 'linkzApp.directive', 'lin
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 linkzApp.controller('listCon', function listCon($scope) {
 
-$('#container').imagesLoaded().fail( function( instance ) {
-  console.log('FAIL ', instance);
-});
+$('#container').imagesLoaded().fail( function( instance ) {});
 
 	var allAboard = false;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -155,15 +153,6 @@ $('#container').imagesLoaded().fail( function( instance ) {
 				addAll.removeClass('nope').addClass('raised');
 			}
 
-
-
-			// $('#addLink').toggleClass(function() {
-			//   if ( $(this).is('.raised') ) {
-			//     return 'nope';
-			//   } else {
-			//     return 'raised';
-			//   }
-			// });
 		}
 
 
