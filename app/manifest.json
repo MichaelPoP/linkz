@@ -5,8 +5,9 @@
   "description": "__MSG_appDescription__",
   "author":"Michael Pospisil",
   "icons": {
-    "16": "images/linkz_logo.png",
-    "128": "images/linkz_logo.png"
+    "16": "images/linkz_logo_16.png",
+    "48": "images/linkz_logo_48.png",
+    "128": "images/linkz_logo_128.png"
   },
   "default_locale": "en",
   "background": {
@@ -51,8 +52,12 @@
   },
   "browser_action": {
     "default_icon": {
-      "19": "images/linkz_logo.png",
-      "38": "images/linkz_logo.png"
+      "16": "images/linkz_logo_16.png",
+      "19": "images/linkz_logo_19.png",
+      "24": "images/linkz_logo_24.png",
+      "32": "images/linkz_logo_32.png",
+      "38": "images/linkz_logo_38.png",
+      "200": "images/linkz_logo_200.png"
     },
     "default_title": "Linkz",
     "default_popup": "popup.html"
