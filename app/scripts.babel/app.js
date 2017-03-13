@@ -4,7 +4,6 @@
 var linkzApp = angular.module('linkzApp', ['ngRoute']);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 linkzApp.controller('listCon', function listCon($scope) {
-
 	var allAboard = false;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
   //-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_//
@@ -17,7 +16,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 		});
 		allAboard = true;
 		$('#queryInput').focus();
-
 		//OPEN LINK LISTENER for opening links in new tab through the api
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('body').on('click', 'a', function(){
@@ -25,16 +23,12 @@ linkzApp.controller('listCon', function listCon($scope) {
 		    return false;
 		});
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 		//JQuery UI code for making bookmarks SORTABLE/DRAGGABLE
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#linkList').sortable();
-
-
 		//set occupied to false initially so that only folders can be dropped
 		var occupied = false;
 		var contents;
-
 		//initiates the dropzone and switches mode depending on what is dropped
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		function initDropzone(id){
@@ -139,7 +133,6 @@ linkzApp.controller('listCon', function listCon($scope) {
 			    $('#linkNameInput').val(title);
 			    $scope.currUrl = url;
 			});
-
 			//filter the results by folder
 			$('#folderCheckbox').prop('checked', true);
 			$scope.checkboxModel = { value: true };
