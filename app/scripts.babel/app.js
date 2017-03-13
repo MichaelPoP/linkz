@@ -1,7 +1,7 @@
 'use strict';
 //NEED TO GET RID OF SET_TIMEOUT, NEED TO SPLIT INTO MORE FUCNTIONS
 //NEED TO TURN MORE PARTS INTO DIRECTIVES/COMPONENTS (sometimes directives suck)
-var linkzApp = angular.module('linkzApp', ['ngRoute', 'linkzApp.directive', 'linkzApp.service']);
+var linkzApp = angular.module('linkzApp', ['ngRoute']);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 linkzApp.controller('listCon', function listCon($scope) {
 

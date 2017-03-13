@@ -8,8 +8,7 @@
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
     <link href="https://fonts.googleapis.com/css?family=Exo:900" rel="stylesheet">
-    <link rel="stylesheet" href="styles/jquery-ui.min.css">
-    
+    <link rel="stylesheet" href="styles/jquery-ui.min.css">  
     <!-- BOOTSTRAP CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href="styles/main.css" rel="stylesheet">
@@ -30,7 +29,6 @@
                 <div>
                   <input id="queryInput" ng-model="query" type="text"
                     placeholder="Search.." autofocus="true" auto-comp><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
-                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                     <div id="folderBox" class="hide-class">
                         <div class="container">
                             <div class="row">
@@ -46,7 +44,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                     <div id="addBox" class="hide-class">
                         <div id="addFormBox" class="hide-class">
                             <form id="linkNameForm">
@@ -73,34 +70,26 @@
                                         </div>                                    
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
-                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-                    <div id="alertBox" class="hide-class">                    
+                    <div id="alertBox" class="hide-class">                      
                     </div>
-                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                 </div>
             </form> 
         </center>   
     </div>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div id="grabUrl">
         <div id="linkBox" class="linkBox" data="linkbox">
             <ul id="linkList" data="{{links.length}}">
-
                 <li ng-repeat="link in links | filter:query | filter: (checkboxModel.value || '') && filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}" title="{{ link.title }}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"><span id="tit-{{ link.id }}" class="linkTitle" data="update">{{ link.title.substr(0,34) }}</span><input id="inp-{{link.id}}" class="hide-class titleInput" type="text" value="{{link.title}}"><img img-fade-in-onload="{{imgSrc}}" class="linkFavicon" ng-if="link.url" height="16" width="16" src='http://www.google.com/s2/favicons?domain={{link.url.substr(0,4) === "file" || link.url.substr(0,5) === "chrom" || link.url.substr(0,4) === "data" ? "google.com" : link.url}}' /><div ng-if="link.url"><br></div>
                 <a class="linkUrl" ng-if="link.url" href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
-                <!-- <div ng-if="link.url" class="iBox"><iframe src="{{link.url}}" frameborder="0" width="95%"></iframe></div> -->
                 <input ng-if="!link.url && !folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
                 <input ng-if="!link.url && folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn addto" type="button" value="add">
-                </li>
-                
+                </li>            
             </ul>
         </div>
     </div>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div id="buttonDeck">
         <center>
         <div id="folderDrop" class="ui-widget-header dropBox">
@@ -108,7 +97,6 @@
         </div>
         </center>
     </div>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->
     <!-- endbower -->
