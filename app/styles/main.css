@@ -34,13 +34,11 @@ li>a:hover {
 .linkItem a:first-of-type {
 	margin-top: 4px;
 }
-
 .hide-class {
 	color: white;
 	display: none;
 	visibility: hidden;
 }
-
 /* POPUP */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -54,7 +52,6 @@ li>a:hover {
 	box-shadow: 0px -3px 6px 4px rgba(0, 0, 0, 0.5);
 	position: relative;
 }
-
 #queryInput {
 	margin-top: 1px;
 	/* margin-bottom: 6px; */
@@ -63,17 +60,14 @@ li>a:hover {
 	font-size: 17px;
 	font-weight: 700;
 }
-
 #addLink {
 	padding: 7.7px 23px;
 	font-size: 1.5em;
 }
-
 #addAll {
 	padding: 7.7px 23px;
 	font-size: 1.5em;
 }
-
 #folderCheckbox {
 	position:absolute;
 	top: 14px;
@@ -94,14 +88,12 @@ li>a:hover {
 	height: 0px;
 	margin-top: 6px;
 }
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* ADD BOX */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* styling for the box that adds links */
 /* -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
-
 #addBox {
 	margin-top: 7px;
 
@@ -112,9 +104,6 @@ li>a:hover {
 .tPad {
 	padding-top: 25px;
 }
-/* div[id^="as_"]
-div[id^="bs_"] */
-
 input[id*='NameInput'] {
 	width: 95%;
 	height: 43px;
@@ -124,11 +113,9 @@ input[id*='NameInput'] {
     font-size: 18px;
     margin: 0px 0px 0px 0px;
 }
-
 input[id*='NameSubmit'] {
 	color: #58B05C;
 	display: inline-block;
-
 }
 input[id*='NameSubmit']:hover {
 	color:  white;
@@ -139,7 +126,6 @@ input[id*='NameSubmit']:hover {
 	text-align: left;
 	font-weight: 700;
 }
-
 .destPre {
 	display: inline-block;
 	font-size: 16px;
@@ -148,27 +134,21 @@ input[id*='NameSubmit']:hover {
 	margin: 4px 0px 0px 12px;
 	font-weight: 800; 
 }
-
 .destFolder {
 	display: inline-block;
 	margin-top: 2px;
 	font-size: 16px;
 	text-align: left;
 }
-
 #newFolderNameInput {
 	margin-top: 5px;
 }
-
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* BODY */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* font-family: 'Exo', sans-serif; */
-
-
 .titleInput {
 	width: 60%;
 	height: 43px;
@@ -177,16 +157,12 @@ input[id*='NameSubmit']:hover {
 	font-weight: 900;
 	color: #01136D;
 }
-
 .linkTitle {
 
 }
-
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* ALERT STUFF */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
-
 .alert-suxess {
 	color: #468B48;
     background-color: #dff0d8;
@@ -195,7 +171,6 @@ input[id*='NameSubmit']:hover {
     border: 3px solid transparent;
     border-radius: 4px;
 }
-
 .successLinks {
 	text-align: left;
 }
@@ -204,27 +179,14 @@ input[id*='NameSubmit']:hover {
 	margin: 0px 0px 5px 0px;
 }
 .success1Link.title {
-	/* text-align: left; */
 	font-weight: 900;
-/* 	position: absolute;
-	top: 65px;
-	left: 15px; */
 }
 .success1Link.destAdded {
-	/* float: right; */
-
 	font-weight: 600;
-/* 	position: absolute;
-	top: 65px;
-	left: 200px; */
 }
 .success1Link.urlAdded {
-	/* text-align: left; */
 	font-weight: 600;
 	white-space: nowrap
-/* 	position: absolute;
-	top: 90px;
-	left: 15px; */
 }
 
 #confirmRemove {
@@ -241,21 +203,14 @@ input[id*='NameSubmit']:hover {
 	color: ghostwhite;
 	text-shadow: 0px 1px 1px #FFF;
 }
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
-
-
-
 .linkFavicon {
 	float: right;
 	margin: 2px;
 }
-
 .linkUrl {
 	margin-left: 40px;
 }
-
-
 #linkBox {
 	display: block;
 	max-height: 600px;
@@ -267,42 +222,29 @@ input[id*='NameSubmit']:hover {
 	margin-bottom: 6px;
 }
 #linkList {
-
-
 }
 .linkItem {
-	/* max-height: 100px; */
 	border: 1px outset #BAD8DF;
 	color: #BADA55;
 	border-radius: 1px;
 	margin-left: -20px;
 	padding: 5px;
 	list-style-type: none;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100 */
-	background: linear-gradient(to bottom,  rgba(238,238,238,0.3) 0%,rgba(238,238,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
+	background: linear-gradient(to bottom,  rgba(238,238,238,0.3) 0%,rgba(238,238,238,1) 100%);
 }
-
 li.linkItem:hover {
 	background: linear-gradient(to bottom,  rgba(238,238,238,0) 50%,rgba(238,238,238,1) 100%);
 	border: 1px inset #ACF4FF;
-
 }
-
-
 .openAllBtn {
 	margin-left: 7px;
 	float: right;
 }
-
 .update-submit {
 	position: relative;
 	float: right;
 	margin: -65px 30px 0px 0px;
-
 }
-
-
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* DropZone Styling */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -312,12 +254,7 @@ li.linkItem:hover {
 	position: relative;
 }
 #folderDrop {
-	/* float: right; */
-	/* display: block; */
-	/* border: 2px solid #7D8F9E; */
-	/* box-sizing: border-box; */
 }
-
 /* styling before folder is dropped */
 .dropBox {
 	width: 100%;
@@ -325,23 +262,18 @@ li.linkItem:hover {
 	font-size:1.3em;
 	font-weight: 800;
 	font-variant: small-caps;
-	/* padding: 10px; */
 	border: 1px solid #7D8F9E;
 	text-shadow: 2px 2px 3px #E3E3E3, -2px -2px 3px #E3E3E3;
-	/* offset-x | offset-y | blur-radius | color */
-	/* text-shadow: 1px 1px 2px black; */
 }
 .dropBox:hover {
 	background: ghostwhite;
 }
-
 .occupied-state {
 	width: 100%;
 	height: 24px;
 	border: 1px solid #7D8F9E;
 	box-shadow: inset 1px 1px 36px 15px rgba(5,182,255,0.8), inset -1px -1px 36px 15px rgba(5,182,255,0.8);
 }
-
 /* title of folder that is dropped */
 .folderTitle {
 	font-size: 1.3em;
@@ -349,14 +281,10 @@ li.linkItem:hover {
 	font-variant: small-caps;
 	margin-bottom: -3px;
 	margin-top: 3px;
-
 }
-
 .moving-state {
 	box-shadow: inset 1px 1px 36px 15px rgba(27,220,53,0.8);	
 }
-
-
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -369,14 +297,11 @@ li.linkItem:hover {
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    /* font-size: 14px; */
     border-radius: 2px;
-}
- 
+} 
 .btn:focus, .btn:active:focus, .btn.active:focus {
     outline: 0 none;
 }
-
 /* custom primary */
 .btn-primary {
 	font-size: 12px;
@@ -387,17 +312,14 @@ li.linkItem:hover {
 .btn-primary.addto {
 	background: #58B05C;
 }
- 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
     background: #C9D3D6;
     font-size: 12px;
 }
- 
 .btn-primary:active, .btn-primary.active {
     background: #93B6B9;
     box-shadow: none;
 }
-
 /* custom default */
 .btn-default {
 	background: #FFF;
@@ -405,40 +327,25 @@ li.linkItem:hover {
 	color: rgba(237,29,29,0.54);
 	height: 43px;
 	z-index: 0;
-
 }
-/* .btn-default:hover {
-	background: #FDFDFD;
-	color: rgba(255,255,255,0.7);
-	 #ed1d1d shadow hex val
-	box-shadow: inset 1px 1px 30px 10px rgba(237,29,29,0.54);
-} */
-
 .redHov:hover {
 	animation: goRed 4s ease-out 1;
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
 }
-
 .greenHov:hover {
-	/* box-shadow: inset 1px 1px 30px 10px rgba(12,179,4,1); */
 	animation: goGreen 4s ease-out 1;
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
 }
-
 .raised:hover	{
-	/* color: #3ECB4C; */
 	animation: goGreen 4s ease-out 1;
-	/* text-shadow: 1px -1px 10px #3ECB4C,-1px 1px 10px #3ECB4C,1px 1px 10px #3ECB4C,-1px -1px 10px #3ECB4C; */
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
 }
 .nope:hover {
 	animation: goRed 1s cubic-bezier(0.4, 0.2, 0.3, 1.0) infinite;
 }
-
-
 /* raised look for primary class */
 .btn-primary.raised {
 	box-shadow: 0 3px 0 0 #007299;
@@ -448,9 +355,7 @@ li.linkItem:hover {
 	box-shadow: none;
 	margin-bottom: -3px;
 	color: #007299;
-	/* margin-top: 1px; */
 }
-
 @keyframes goGreen {
   0% {
   	#33a6cc
@@ -460,16 +365,11 @@ li.linkItem:hover {
     background-color: #3ECB4C;
   }
 }
-
 @keyframes goRed {
   0% {
-  	/* #33a6cc */
     background-color: #FFF;
   }
   100% {
     background-color: #ed1d1d;
   }
 }
-
-
-

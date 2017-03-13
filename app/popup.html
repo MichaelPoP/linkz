@@ -18,10 +18,6 @@
     <script src="libs/jquery-3.1.0.min.js"></script>
     <script src="libs/jquery-ui.min.js"></script>
     <script src="scripts/app.js"></script>
-    <script src="scripts/directive.js"></script>
-    <script src="scripts/service.js"></script>
-    <!-- <script src="scripts/component.js"></script> -->
-    <script src="scripts/postloadController.js"></script>
     <script src="libs/angular-route.js"></script>
     <script src="libs/imagesloaded.js"></script>
   </head>
@@ -29,13 +25,12 @@
     <div id="queryBox">
         <center>
             <span style="float:left;"><input id="addLink" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="+" tabindex="-1"></span><span style="float:right;"><input id="addAll" class="btn btn-primary linkBut raised" height="2.2em;" type="button" value="++" tabindex="-1"></span>
-
             <form class="searchForm">
             <!-- mass-autocomplete -->
                 <div>
                   <input id="queryInput" ng-model="query" type="text"
                     placeholder="Search.." autofocus="true" auto-comp><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
-
+                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                     <div id="folderBox" class="hide-class">
                         <div class="container">
                             <div class="row">
@@ -51,17 +46,14 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                     <div id="addBox" class="hide-class">
                         <div id="addFormBox" class="hide-class">
                             <form id="linkNameForm">
-
                                 <div class="container">
                                     <div class="row">
                                         <form id="linkNameForm">
                                             <div class="col-xs-8">
-                                               <!--  <select id="linkDestInput" class="hide-class" ng-model="linkDest" ng-options="folder as folder.title.substr(0,49) for folder in folders track by folder.id" width="40">
-                                                </select>  -->
                                                 <input id="linkNameInput" class="hide-class" type="text" maxlength="30" placeholder="Link Name..">
                                             </div>
                                             <div class="col-xs-4 addBoxCells">
@@ -78,7 +70,6 @@
                                         <div class="col-xs-4 addBoxCells tPad">
                                             <input id="newFolderNameSubmit" class="btn btn-default hide-class greenHov nwInputs" type="submit" style="float:left">
                                             <input id="newFolderNameCancel" class="btn btn-default redHov hide-class nwInputs" type="submit" style="float:right;" value="x">
-                                            <!-- <input type="text"> -->
                                         </div>                                    
                                     </div>
                                 </div>
@@ -86,21 +77,15 @@
                             </form>
                         </div>
                     </div>
-                    <div id="alertBox" class="hide-class">
-                        
+                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+                    <div id="alertBox" class="hide-class">                    
                     </div>
+                    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
                 </div>
             </form> 
-
-
-
         </center>   
     </div>
-
-    <!-- <link-list ng-if="allAboard"></link-list> -->
-    <!-- <hr> -->
-    <!-- <input id="deleteLink" type="button" value="xxx"> -->
-
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div id="grabUrl">
         <div id="linkBox" class="linkBox" data="linkbox">
             <ul id="linkList" data="{{links.length}}">
@@ -115,7 +100,7 @@
             </ul>
         </div>
     </div>
-
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div id="buttonDeck">
         <center>
         <div id="folderDrop" class="ui-widget-header dropBox">
@@ -123,15 +108,13 @@
         </div>
         </center>
     </div>
-
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->
     <!-- endbower -->
     <!-- endbuild -->
-
     <!-- build:js scripts/popup.js -->
     <script src="scripts/popup.js"></script>
-
     <!-- endbuild -->
   </body>
 </html>
