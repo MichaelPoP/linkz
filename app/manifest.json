@@ -6,8 +6,6 @@
   "author":"Michael Pospisil",
   "icons": {
     "16": "images/linkz_logo_16.png",
-    "48": "images/linkz_logo_48.png",
-    "128": "images/linkz_logo_128.png",
     "200": "images/linkz_logo_200.png"
   },
   "default_locale": "en",
@@ -60,7 +58,7 @@
       "38": "images/linkz_logo_38.png",
       "200": "images/linkz_logo_200.png"
     },
-    "default_title": "Linkz",
+    "default_title": "Links (Click to search your Bookmarks)",
     "default_popup": "popup.html"
   }
 }
