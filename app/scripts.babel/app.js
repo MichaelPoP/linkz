@@ -13,6 +13,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 		console.log('bookmarks loaded in[  '+ timeE +'  ]ms...');
 		$( document ).ready(function() {
     		console.log( 'ready!' );
+    		//forces the ng-repeat to render the list immediately
+    		$scope.$apply()
 		});
 		allAboard = true;
 		$('#queryInput').focus();
