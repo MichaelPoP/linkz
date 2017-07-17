@@ -1,5 +1,4 @@
 body {
-  /* padding: 20px; */
   height: 100%;
   margin: 0 auto;
   color: #666;
@@ -9,7 +8,6 @@ body {
 
 }
 li>* {
-	/* white-space: nowrap; */
 	display: inline-block;
 }
 li>span {
@@ -28,8 +26,9 @@ li>a {
 	width: 95%;
 }
 li>a:hover {
-	font-size: 14px;
+	font-size: 13px;
 	color: green;
+	text-decoration: underline !important;
 }
 .linkItem a:first-of-type {
 	margin-top: 4px;
@@ -38,6 +37,9 @@ li>a:hover {
 	color: white;
 	display: none;
 	visibility: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;
 }
 /* POPUP */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -54,8 +56,7 @@ li>a:hover {
 }
 #queryInput {
 	margin-top: 1px;
-	/* margin-bottom: 6px; */
-	width: 50%;
+	width: 60%;
 	height: 43px;
 	font-size: 17px;
 	font-weight: 700;
@@ -68,24 +69,96 @@ li>a:hover {
 	padding: 7.7px 23px;
 	font-size: 1.5em;
 }
-#folderCheckbox {
+
+/* CHECKBOX FOR FILTERING BY FOLDER */
+
+     /* APPLIES TO BOTH CHECKBOXES */
+input[id*='Checkbox'] {
+	display: none;
 	position:absolute;
-	top: 14px;
-	right: 126px;
 }
-#folderCheckbox:hover::before {
-	content: 'Only show folders';
+input[id*='Checkbox'] + label span {
+	display:inline-block;
+    width:25px;
+    height:25px;
+    position:absolute;
+    background: #FFF;
+    border-radius: 2px;
+	box-shadow: 0.5px 0 0.5px #007299;
+    cursor:pointer;
+}
+input[id*='Checkbox'] + label span::before {
+	font-family: 'Glyphicons Halflings';
+	color: #C0C0C0;
+	height: 100%;
+	width: 100%;
+}
+input[id*='Checkbox']:checked + label span::before {
+	font-family: 'Glyphicons Halflings';
+	/* color: #74A033  -  #24C036  -  #3ECB4C; */
+	color: #58B05C;
+	text-shadow: 0.5px 0.5px 0.5px black;
+	height: 100%;
+	width: 100%;
+}
+input[id*='Checkbox']:hover + label::before {
 	display: inline-block;
 	white-space: nowrap;
 	position: absolute;
-	right: 14px;
 }
+
+
+/*  CHECKBOX FOR FILTERING BY FOLDER */
+#folderCheckbox {
+	top: 14px;
+	right: 126px;
+}
+input#folderCheckbox + label span {
+	top: 14px;
+	right: 106px;
+}
+input#folderCheckbox + label span::before { 
+	content:"\e117";
+	font-size: 18px;
+}
+#folderCheckbox:hover + label::before {
+	content: 'Show folders';
+    right: 167px;
+    top: 19px;
+}
+
+
+/* CHECKBOX FOR FILTERING BY CURRENT WEB ADDRESS */
+#currentCheckbox {
+	top: 14px;
+	right: 156px;
+}
+input#currentCheckbox + label span {
+	top: 14px;
+	right: 136px;
+}
+input#currentCheckbox + label span::before { 
+	content:"\e006";
+	font-size: 20px;
+}
+input#currentCheckbox:checked + label span::before {
+	color:#FCD209 ;
+}
+#currentCheckbox:hover + label::before {
+	content: 'Show current';
+    right: 167px;
+    top: 19px;
+}
+
+
 #folderBox {
 	height: 0px;
 	padding: 12px;
 }
 #alertBox {
+	overflow: hidden;
 	height: 0px;
+	width: 420px;
 	margin-top: 6px;
 }
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -102,7 +175,7 @@ li>a:hover {
 	padding:0px 7px 0px 7px;
 }
 .tPad {
-	padding-top: 25px;
+	padding-top: 31px;
 }
 input[id*='NameInput'] {
 	width: 95%;
@@ -120,20 +193,48 @@ input[id*='NameSubmit'] {
 input[id*='NameSubmit']:hover {
 	color:  white;
 }
+#destFolderBox {
+}
 #destFolderName {
+	width: 213px;
 	font-size: 16px;
-	margin-left: 24px;
+	margin-left: 10px;
+	margin-bottom: 0;
+	margin-top: 7px;
 	text-align: left;
+	float: left;
 	font-weight: 700;
+	overflow: scroll;
+	white-space: nowrap;
+}
+#addNewFolder:hover + div::before {
+	content: 'Click to create new folder';
+	background: #FFF;
+	padding: 2px 42px 2px 2px;
+	font-size: 14px;
+	display: inline-block;
+	white-space: nowrap;
+	position: absolute;
+    /* right: 58px; */
+    top: 6px;
+}
+#addNewFolder:hover {
+	color: #93CAE7;
+	text-shadow: 0.3px 0.3px 0.3px black;
 }
 .destPre {
 	display: inline-block;
 	font-size: 16px;
 	text-align: left;
 	float: left;
-	margin: 4px 0px 0px 12px;
-	font-weight: 800; 
+	margin: 6px 0px 4px 12px;
+	color:#C0C0C0;
+	font-weight: 700;
+    cursor:pointer;
 }
+/* .destPre:hover {
+
+} */
 .destFolder {
 	display: inline-block;
 	margin-top: 2px;
@@ -160,6 +261,23 @@ input[id*='NameSubmit']:hover {
 .linkTitle {
 
 }
+#linkBox {
+	transition: height 0.5s;
+	height: 0px;
+}
+#grabUrl {
+	transition: height 0.5s;
+	height: 0px;
+}
+#linkBox.expand {
+	height: 380px;	
+}
+#grabUrl.expand {
+	height: 380px;
+}
+#grabUrl.flash {
+	animation: flash 800ms ease-out 1;
+}
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
 /* ALERT STUFF */
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -173,10 +291,12 @@ input[id*='NameSubmit']:hover {
 }
 .successLinks {
 	text-align: left;
+	margin: 5px 0 5px 0;
 }
 .success1Link {
 	text-align: left;
 	margin: 0px 0px 5px 0px;
+	white-space: nowrap;
 }
 .success1Link.title {
 	font-weight: 900;
@@ -214,7 +334,6 @@ input[id*='NameSubmit']:hover {
 #linkBox {
 	display: block;
 	max-height: 600px;
-	height: 380px;
 	overflow-x: hidden;
 	width: 452px;
 	padding: 5px;
@@ -235,6 +354,19 @@ input[id*='NameSubmit']:hover {
 li.linkItem:hover {
 	background: linear-gradient(to bottom,  rgba(238,238,238,0) 50%,rgba(238,238,238,1) 100%);
 	border: 1px inset #ACF4FF;
+}
+li.linkItem.highLight {
+	/* D5CA01  -  E9E526  -  FCD209 */
+	border: 1px outset #FCD209;
+	box-shadow: inset 0 0 4px 0.5px #FCD209;
+}
+li.linkItem.highLight:hover {
+	border: 1px outset #FCD209;
+	box-shadow: inset 0 0 4px 0.5px #FCD209;
+}
+a.highLight {
+	text-shadow: .5px .5px 0.5px #FCD209,-.5px -.5px .5px #C1C1C1 !important;
+	text-decoration: underline !important;
 }
 .openAllBtn {
 	margin-left: 7px;
@@ -276,14 +408,19 @@ li.linkItem:hover {
 }
 /* title of folder that is dropped */
 .folderTitle {
-	font-size: 1.3em;
+	font-size: 1.25em;
 	font-weight: 800;
-	font-variant: small-caps;
-	margin-bottom: -3px;
-	margin-top: 3px;
+	margin: 0 auto;
+	line-height: 1.3;
+	text-shadow:0.5px 0.5px 0.5px #FFF;
 }
 .moving-state {
-	box-shadow: inset 1px 1px 36px 15px rgba(27,220,53,0.8);	
+	box-shadow: inset 1px 1px 60px 30px rgba(27,220,53,0.8);
+	text-shadow: 0.5px 0.5px 1px #000;	
+}
+#droppedMark {
+	margin-top: 2px;
+	font-size: 14px;
 }
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
@@ -329,22 +466,26 @@ li.linkItem:hover {
 	z-index: 0;
 }
 .redHov:hover {
-	animation: goRed 4s ease-out 1;
+	animation: goRed 1s ease-out 1;
+	animation-fill-mode: forwards;
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
 }
 .greenHov:hover {
-	animation: goGreen 4s ease-out 1;
+	animation: goGreen 1s ease-out 1;
+	animation-fill-mode: forwards;
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
+	background: #3ECB4C;
 }
 .raised:hover	{
-	animation: goGreen 4s ease-out 1;
+	animation: goBlueToGreen 1s ease-out 1;
+	animation-fill-mode: forwards;
 	text-shadow: 0px 1px 1px #FFF;
 	color: #F1F1F1;
 }
 .nope:hover {
-	animation: goRed 1s cubic-bezier(0.4, 0.2, 0.3, 1.0) infinite;
+	animation: pulseRed 2s ease-in-out infinite;
 }
 /* raised look for primary class */
 .btn-primary.raised {
@@ -358,11 +499,19 @@ li.linkItem:hover {
 }
 @keyframes goGreen {
   0% {
-  	#33a6cc
-    background-color: #FFF;
+  	background: #FFF;
   }
   100% {
-    background-color: #3ECB4C;
+    background: #3ECB4C;
+    border: 2px solid #3ECB4C;
+  }
+}
+@keyframes goBlueToGreen {
+  0% {
+    background-color: #33A6CC;
+  }
+  100% {
+    background: #3ECB4C;
   }
 }
 @keyframes goRed {
@@ -370,6 +519,39 @@ li.linkItem:hover {
     background-color: #FFF;
   }
   100% {
-    background-color: #ed1d1d;
+    background-color: #ED1D1D;
+    border: 2px solid #ED1D1D;
   }
+}
+@keyframes pulseRed {
+	0% {
+		background-color: #FFF;
+		border: 0.5px solid red;
+		color: red;
+	}
+	50% {
+		background-color: #ED1D1D;
+		color: #FFF;
+	}
+	100% {
+		background-color: #FFF;
+		border: 0.5px solid red;
+		color: red;
+	}
+}
+@keyframes expand {
+  0% {
+  	height: 0px;
+  }
+  100% {
+	height: 380px;
+  }
+}
+@keyframes flash {
+	0% {
+	  box-shadow: inset 0px 1px 200px 30px #C5DDEC, inset 0px -1px 200px 30px #C5DDEC;
+	}
+	100% {
+	  box-shadow: none;
+	}
 }

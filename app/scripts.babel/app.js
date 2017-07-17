@@ -10,14 +10,53 @@ linkzApp.controller('listCon', function listCon($scope) {
 //function called when all the bookmarks have been fetched to prevent all sorts
 //of errors, but ideally this would be in a component fetching from a service
 	$scope.bookmarksLoaded = function($scope, timeE) {
-		console.log('bookmarks loaded in[  '+ timeE +'  ]ms...');
+		$scope.saved = []
+		$scope.$watch('saved');
+		// console.log('bookmarks loaded in[  '+ timeE +'  ]ms...');
 		$( document ).ready(function() {
     		console.log( 'ready!' );
     		//forces the ng-repeat to render the list immediately
-    		$scope.$apply()
+    		// $scope.$apply();
+    		checkCurrentTab();
+    		$('#queryInput').focus();
 		});
+
+		function checkCurrentTab(){
+			chrome.tabs.query({'active': true, 'currentWindow':true}, function (tabs) {
+				var saved = [];
+				$scope.links.forEach(function(link){
+					if(link.url && link.url == tabs[0].url){
+						$scope.saved.push(link.parentId,link.id);
+					}
+				});
+				//moved apply until after current tab check
+				$scope.$apply();
+			});
+		}
 		allAboard = true;
-		$('#queryInput').focus();
+		$scope.linkDest = [];
+		//QUERY INPUT LISTENER for expanding list when input is entered
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		$('#queryInput').keyup(function(){
+			expand();
+		});
+		//SAVED CHECKBOX LISTENER for expanding list when saved checkbox is clicked
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		$('#currentCheckbox').on('click',function(){
+			expand();
+		});
+		//FOR MANUALLY OPENING LIST DRAWER
+		$('#folderDrop').on('click',function(){
+			expand();
+		});
+		//expands the list box, this cannot be undone unless you re-open the popup
+		function expand(){
+			if($('#linkBox').hasClass('expand') === false && $('#grabUrl').hasClass('expand') === false){
+				$('#grabUrl').addClass('flash');
+				$('#linkBox, #grabUrl').addClass('expand');
+				$('#folderDrop').text('drop folder here');
+			}
+		}
 		//OPEN LINK LISTENER for opening links in new tab through the api
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('body').on('click', 'a', function(){
@@ -33,7 +72,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 		var contents;
 		//initiates the dropzone and switches mode depending on what is dropped
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		function initDropzone(id){
+		function initDropzone(id, title){
 			//when folder is in dropzone occupied is true, links and folders can be dropped
 			//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 			if(occupied === true){
@@ -43,31 +82,33 @@ linkzApp.controller('listCon', function listCon($scope) {
 					tolerance: 'touch',
 			      	drop: function(event, ui) {
 			      		var folderId = id;
+			      		var folderTitle = title;
 			      		// checks if dropped item is link or folder 
 						if(ui.draggable[0].attributes.data.value === 'false'){
 							// if its a link then go ahead and move it
-							var props1 = {color:'hex(#1BDC35)',borderColor:'hex(#1BDC35)'};
+							var props1 = {color:'hex(#FFF)',borderColor:'hex(#1BDC35)',height:'60px'};
 							//here the dropped link is actually moved to folder
 							chrome.bookmarks.move(String(ui.draggable[0].attributes.id.value.substr(4)), {'parentId': String(folderId)}, function(data){});
 							$('#folderDrop').children().addClass('hide-class');
+
 							$('#folderDrop')
 								.addClass('moving-state')
-								.append('<p id="droppedMark">'+ui.draggable[0].innerText+'</p>')
+								.append('<p id="droppedMark">'+ui.draggable[0].innerText.split('\n').slice(0,1).join()+'<br>'+'-  moved to  -'+'<br>'+folderTitle+'</p>')
 								.animate(props1,1000,'easeOutQuint');
 								setTimeout(function(){ 
-									var props2 = {color:'hex(#000)', borderColor:'hex(#05B6FF)'};
+									var props2 = {color:'hex(#000)', borderColor:'hex(#05B6FF)',height:'42px'};
 									var remProps = {'opacity': 0};
-									$('#droppedMark').remove().animate(remProps, 1000, 'easeOutQuint');
 									$('#folderDrop').children().removeClass('hide-class');
 									$('#folderDrop').removeClass('moving-state').addClass('occupied-state');
 									$('#folderDrop').animate(props2, 1000, 'easeOutQuint');
+									$('#droppedMark').remove().animate(remProps, 1000, 'easeOutQuint');
 								}, 2500);
-							initDropzone(folderId);
+							initDropzone(folderId, folderTitle);
 						} else {
 							// if it is another folder we need to update the title and re-initialize the dropzone
 							occupied = true;
-							$(this).html('<p class="folderTitle">drag links to add to folder: '+ui.draggable[0].title+'</p>')
-							initDropzone(ui.draggable[0].attributes.id.value.substr(4));
+							$(this).html('<p class="folderTitle">drag links to add to folder: <br>'+ui.draggable[0].title+'</p>')
+							initDropzone(ui.draggable[0].attributes.id.value.substr(4), ui.draggable[0].attributes.title.value);
 						}
 			      	}
 			    });
@@ -85,7 +126,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 			            	.html('<p class="folderTitle">drag links to add to folder: '+ui.draggable[0].title+'</p>')
 			            	.animate(props,1000,'easeOutQuint');
 			            occupied = true;
-			            initDropzone(ui.draggable[0].attributes.id.value.substr(4));
+					    initDropzone(ui.draggable[0].attributes.id.value.substr(4), ui.draggable[0].attributes.title.value);
 			      	} 	
 			    });	
 			}
@@ -129,6 +170,10 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		$('#addLink').on('click', function(e){
 			disableAddButtons();
+			$('#linkNameInput, #linkNameSubmit, #linkDestInput, #linkNameCancel').removeClass('hide-class');
+			$('#addBox').removeClass('hide-class');
+			$('#addBox').stop().animate({height:'+=67px'},300,'easeOutQuint', function(){$('#addFormBox').removeClass('hide-class');});
+
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
 			    var url = tabs[0].url;
 			    var title = tabs[0].title;
@@ -141,11 +186,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 			$scope.$apply();
 			folderMod();
 			$scope.folderMod = { value: true };
-
-			$('#linkNameInput, #linkNameSubmit, #linkDestInput, #linkNameCancel').removeClass('hide-class');
-			$('#linkNameInput').focus();
-			$('#addBox').removeClass('hide-class');
-			$('#addBox').stop().animate({height:'+=67px'},300,'easeOutQuint', function(){$('#addFormBox').removeClass('hide-class');});
+			setTimeout(function(){ $('#queryInput').focus(); }, 500);
 		});
 
 		function folderMod(){
@@ -156,17 +197,34 @@ linkzApp.controller('listCon', function listCon($scope) {
 			});			
 		}
 
-		var linkDest = '';
 		function pickDestFolder(id){
-			linkDest = id.substr(4);
-			var desTitle = $('#tit-'+linkDest).text();
-			$('#destFolderName').text(desTitle);
+			$scope.linkDest.push(id.substr(4));
+			var destId = $scope.linkDest[$scope.linkDest.length - 1];
+			$('#but-'+destId).val('remove');
+			$('#but-'+destId).removeClass('addto').addClass('removefrom');
+
+			var desTitle = $('#tit-'+destId).text();
+			var currText = $('#destFolderName').text();
+			$('#destFolderName').text(currText + ' ' +desTitle);
+		}
+		function removeDestFolder(id){
+			var destId = String(id.substr(4))
+			$scope.linkDest.splice($scope.linkDest.indexOf(destId),1);
+			var currText = $('#destFolderName').text();
+			var desTitle = $('#tit-'+destId).text();
+
+			var currTextArr = currText.split(' ');
+			currTextArr.splice(currTextArr.indexOf(desTitle),1);;
+			$('#destFolderName').text(currTextArr.join(' '));
+			$('#but-'+destId).val('add');
+			$('#but-'+destId).removeClass('removefrom').addClass('addto');
 		}
 
 		function onSuccess(desTitle, newLinkData){
-	    	$('#alertBox').append('<p class="success1Link title">'+newLinkData.title.substr(0,60)+'</p><p class="success1Link urlAdded">'+newLinkData.url.substr(0,58)+'</p><p class="success1Link destAdded">Added to: '+desTitle+'</p>');
+	    	$('#alertBox').append('<p class="success1Link title">'+newLinkData.title.substr(0,56)+'</p><p class="success1Link urlAdded">'+newLinkData.url.substr(0,58)+'</p><p class="success1Link destAdded">Added to: '+desTitle+'</p>');
+	    	$scope.linkDest = [];
 	    	setTimeout(function(){ 
-	    		removeAlert(); 
+	    		removeAlert();
 	    		enableAddButtons();
 		    	$('#folderCheckbox').prop('checked', false);
 				$scope.checkboxModel = { value: false };
@@ -185,20 +243,26 @@ linkzApp.controller('listCon', function listCon($scope) {
 			var onlyFolders = $scope.folders
 			onlyFolders.forEach(function(f){
 				$('#but-'+f.id).val('open all');
-				$('#but-'+f.id).removeClass('addto');
+				$('#but-'+f.id).removeClass('addto removefrom');
 			});
 			$scope.folderMod = { value: false };
-
+			$scope.linkDest = [];
 			if(!linkCreated){ enableAddButtons(); }
 
 			if(linkCreated){
 				$('#alertBox').addClass('alert-suxess');
 				$('#alertBox').removeClass('hide-class');
-				$('#alertBox').stop().animate({height:'+=50px'},500,'easeOutQuint');
-				enableAddButtons();					
-
-		    	chrome.bookmarks.get(data.parentId, function(data){
+				$('#alertBox').stop().animate({height:'+=50px'},500,'easeOutQuint');	
+				var destination = data.parentId			
+				if(data.destArray){
+					destination = data.destArray;
+				}
+		    	chrome.bookmarks.get(destination, function(data){
 		    		var desTitle = data[0].title;
+		    		if(data.length > 1){
+		    			var tits = data.map(function(a) {return a.title;});
+		    			desTitle = tits.join('+');
+		    		}
 		    		onSuccess(desTitle, newLinkData);
 		    	});
 			}
@@ -206,19 +270,45 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 
 		function saveLink(e){
-			var linkName = $('#linkNameInput').val();
-			var scopeDest = linkDest;
-			chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-			    var bookmark = new Object();
-			    bookmark.parentId = newLinkDest || linkDest || '1';
-			    bookmark.title = linkName || tabs[0].title;
-			    bookmark.url = tabs[0].url;
+			$scope.destArray = [];
+			if($scope.linkDest.length == 1 || $scope.linkDest.length == 0){
+				var linkName = $('#linkNameInput').val();
+				chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+				    var bookmark = new Object();
+				    bookmark.parentId = $scope.linkDest[0] || '1';
+				    bookmark.title = linkName || tabs[0].title;
+				    bookmark.url = tabs[0].url;
 
-			    chrome.bookmarks.create(bookmark, function(data){
-			    	var linkCreated = true;
-			    	addBoxRemove(data, linkCreated);
-			    });
-			});
+				    chrome.bookmarks.create(bookmark, function(data){
+				    	var linkCreated = true;
+				    	addBoxRemove(data, linkCreated);
+				    });
+				});
+			} else {
+				var cdata;
+				var linkCreated;
+				$scope.linkDest.forEach(function(dest,i){
+					var linkName = $('#linkNameInput').val();
+					chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+					    var bookmark = new Object();
+					    bookmark.parentId = dest || '1';
+					    bookmark.title = linkName || tabs[0].title;
+					    bookmark.url = tabs[0].url;
+
+					    chrome.bookmarks.create(bookmark, function(data){
+					    	$scope.destArray.push(data.parentId);
+					    	data.destArray = $scope.destArray
+					    	linkCreated = true;
+					    	cdata = data;
+					    	//catch for adding to multiple folders to 
+					    	//prevent addBoxRemove from being called multiple times
+					    	if ($scope.linkDest.length - 1 == i) {
+								addBoxRemove(data, linkCreated);
+					    	}
+					    });
+					});
+				});						
+			}
 		}
 
 		$('#linkNameSubmit').on('click', saveLink);
@@ -233,12 +323,12 @@ linkzApp.controller('listCon', function listCon($scope) {
 		//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		$('#addAll').on('click', function(){
 			disableAddButtons();
-			// var folderName = prompt('Name the folder.');
-			$('#folderNameInput').removeClass('hide-class').focus();
+			$('#folderNameInput').removeClass('hide-class');
 			$('#folderNameSubmit').removeClass('hide-class');
 			$('#folderNameCancel').removeClass('hide-class');
 			$('#folderBox').removeClass('hide-class');
-			$('#folderBox').stop().animate({height:'+=48px'},1000,'easeOutQuint');
+			$('#folderBox').stop().animate({height:'+=48px'},300,'easeOutQuint');
+			setTimeout(function(){ $('#queryInput').focus(); }, 500);
 		});
 
 		//after choosing folder name user clicks submit or cancel
@@ -258,7 +348,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 			chrome.tabs.query({'lastFocusedWindow': true}, function (tabs) {
 				var folder = new Object();
 				folder.title = folderName;
-				var height = (tabs.length * 20)+48+'px';
+				var height = (tabs.length * 17)+48+'px';
 				var props = {'height':height};
 
 				//creates folder object and adds tabs to it
@@ -305,15 +395,15 @@ linkzApp.controller('listCon', function listCon($scope) {
 		function newFolderPrompt(e){
 			if($('#addBox').hasClass('open')){
 			} else {
-				$('#addBox').stop().animate({height:'+=42px'},300,'easeOutQuint', 
+				$('#addBox').stop().animate({height:'+=53px'},300,'easeOutQuint', 
 					function(){
 						$('#addBox').addClass('open');
 						$('.nwInputs').removeClass('hide-class');
 				});
+				setTimeout(function(){ $('#newFolderNameInput').focus(); }, 500);
 			}
 		}
 
-		var newLinkDest = '';
 		function saveNewFolder(e){
 			var folder = new Object();
 			folder.title = $('#newFolderNameInput').val();
@@ -322,7 +412,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 			//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 		    chrome.bookmarks.create(folder, function(data){
 		    	var folderCreated = true;
-		    	newLinkDest = data.id;
+		    	$scope.linkDest.push(data.id);
 		    	newFolderBoxRemove(folder.title, folderCreated);	
 		    });			
 		}
@@ -331,8 +421,11 @@ linkzApp.controller('listCon', function listCon($scope) {
 		$('#newFolderNameCancel').on('click', {folderCreated: false}, newFolderBoxRemove);
 
 		function newFolderBoxRemove(title, folderCreated){
-			if(folderCreated){ $('#destFolderName').text(title); }
-			$('#addBox').stop().animate({height:'-=42px'},300,'easeOutQuint', 
+			if(folderCreated){ 
+				var currTitle = $('#destFolderName').text();
+				$('#destFolderName').text(currTitle + ' ' + title);
+			}
+			$('#addBox').stop().animate({height:'-=53px'},300,'easeOutQuint', 
 				function(){
 					$('.nwInputs').addClass('hide-class');
 					$('#addBox').removeClass('open');
@@ -341,7 +434,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 
 
 
-		//HERE LIES THE ONLY WAY I COULD FIGURE OUT HOW TO HANDLE ALL EVENTS WITH ONE HANDLER
+		//HANDLING ALL EVENTS ON LIST ITEMS WITH ONE HANDLER...PROCESS ACTION..
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//Adds an event listener to the element that contains the bookmark list
 		$('#linkBox').on('click', processAction);
@@ -360,6 +453,8 @@ linkzApp.controller('listCon', function listCon($scope) {
 					updateTitleSubmit(e);
 				} else if(tgt.attributes.class.value.includes('addto')){
 					pickDestFolder(tgt.id);
+				} else if(tgt.attributes.class.value.includes('removefrom')){
+					removeDestFolder(tgt.id);
 				} else {
 					openAllFolderMarks(tgt.id.substr(4));
 				}		
@@ -506,8 +601,10 @@ linkzApp.controller('listCon', function listCon($scope) {
 						marks.forEach(function(mark){
 							//Appends an link element for each bookmark in the selected folder
 							//doesn't display folders inside folders
+							var stat = ''
 							if(mark.url){
-								$('#'+e.target.id).append('<br><a id="sublink-'+mark.id+'" href="'+mark.url+'">'+mark.url.substr(0,50)+'</a>');
+								$scope.saved.includes(mark.id) ? stat = 'highLight' : stat = ''
+								$('#'+e.target.id).append('<br><a id="sublink-'+mark.id+'" href="'+mark.url+'" class="'+stat+'">'+mark.url.substr(0,50)+'</a>');
 							}
 							recentMarksOpened.push(mark);			
 						});
@@ -595,6 +692,7 @@ linkzApp.controller('listCon', function listCon($scope) {
 	}
 	//filter function that watches checkbox & filters by folder when checked
 	$scope.checkboxModel = { value: false };
+	$scope.currentCheckboxModel = { value: false };
 	$scope.filterFunc = function(items, query){
 		if($scope.checkboxModel.value === true){
 			return !items.url;
@@ -602,6 +700,16 @@ linkzApp.controller('listCon', function listCon($scope) {
 			return items;
 		}
 	}
+	//another filter function that watches current checkbox a & filters by whether the link
+	//shares a url with the current url or is a folder that contains such a link
+	$scope.currentFilterFunc = function(items, query){
+		if ($scope.currentCheckboxModel.value === true){
+			return ($scope.saved.indexOf(items.id) !== -1);
+		} else {
+			return items
+		}
+	}
+
 	var folders = [];
 	var marks = [];
 	var timeS = 0;

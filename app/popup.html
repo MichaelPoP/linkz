@@ -28,7 +28,7 @@
             <!-- mass-autocomplete -->
                 <div>
                   <input id="queryInput" ng-model="query" type="text"
-                    placeholder="Search.." autofocus="true" auto-comp><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value">
+                    placeholder="Search.." autofocus="true" auto-comp><input id="currentCheckbox" type="checkbox" ng-model="currentCheckboxModel.value"><label for="currentCheckbox"><span class="icon"></span></label><input id="folderCheckbox" type="checkbox" ng-model="checkboxModel.value"><label for="folderCheckbox"><span class="icon"></span></label>
                     <div id="folderBox" class="hide-class">
                         <div class="container">
                             <div class="row">
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="row" style="margin-bottom: 5px;">
                                         <div id="destFolderBox" class="col-xs-8">
-                                            <span id="addNewFolder" class="destPre glyphicon glyphicon-folder-open"></span><p id="destFolderName" class="destFolder"></p>
+                                            <span id="addNewFolder" class="destPre glyphicon glyphicon-folder-open"></span><div id="destFolderName" class="destFolder"></div>
                                             <input id="newFolderNameInput" type="text" class="hide-class nwInputs" maxlength="30" placeholder="Folder Name..">
                                         </div>
                                         <div class="col-xs-4 addBoxCells tPad hide-class nwInputs">
@@ -82,7 +82,7 @@
     <div id="grabUrl">
         <div id="linkBox" class="linkBox" data="linkbox">
             <ul id="linkList" data="{{links.length}}">
-                <li ng-repeat="link in links | filter:query | filter: (checkboxModel.value || '') && filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem" data="{{link.url ? false : true}}" title="{{ link.title }}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"><span id="tit-{{ link.id }}" class="linkTitle" data="update">{{ link.title.substr(0,34) }}</span><input id="inp-{{link.id}}" class="hide-class titleInput" type="text" value="{{link.title}}"><img img-fade-in-onload="{{imgSrc}}" class="linkFavicon" ng-if="link.url" height="16" width="16" src='http://www.google.com/s2/favicons?domain={{link.url.substr(0,4) === "file" || link.url.substr(0,5) === "chrom" || link.url.substr(0,4) === "data" ? "google.com" : link.url}}' /><div ng-if="link.url"><br></div>
+                <li ng-repeat="link in links | filter:query | filter: (currentCheckboxModel.value || '') && currentFilterFunc | filter: (checkboxModel.value || '') && filterFunc | orderBy:'-dateAdded' track by link.id" id="fol-{{link.id}}" class="ui-state-default linkItem {{saved.includes(link.id) ? 'highLight' : ''}}" data="{{link.url ? false : true}}" title="{{ link.title }}"><input id="lnk-{{ link.id }}" class="deleteLink btn btn-default" type="button" value="x" data="del"><span id="tit-{{ link.id }}" class="linkTitle" data="update">{{ link.title.substr(0,34) }}</span><input id="inp-{{link.id}}" class="hide-class titleInput" type="text" value="{{link.title}}" maxlength="30" data=""><img img-fade-in-onload="{{imgSrc}}" class="linkFavicon" ng-if="link.url" height="16" width="16" src='http://www.google.com/s2/favicons?domain={{link.url.substr(0,4) === "file" || link.url.substr(0,5) === "chrom" || link.url.substr(0,4) === "data" ? "google.com" : link.url}}' /><div ng-if="link.url"><br></div>
                 <a class="linkUrl" ng-if="link.url" href="{{ link.url }}">{{ link.url.substr(0,50) }}</a>
                 <input ng-if="!link.url && !folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn" type="button" value="open all">
                 <input ng-if="!link.url && folderMod.value" id="but-{{link.id}}" class="btn btn-primary openAllBtn addto" type="button" value="add">
@@ -93,7 +93,7 @@
     <div id="buttonDeck">
         <center>
         <div id="folderDrop" class="ui-widget-header dropBox">
-            <span>drop folder here</span>
+            <span>open list</span>
         </div>
         </center>
     </div>
@@ -102,7 +102,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js scripts/popup.js -->
-    <script src="scripts/popup.js"></script>
+    <!-- <script src="scripts/popup.js"></script> -->
     <!-- endbuild -->
   </body>
 </html>
